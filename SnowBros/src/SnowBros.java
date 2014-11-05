@@ -24,8 +24,16 @@ class SnowBrosComponent extends JComponent{
 }
 
 public class SnowBros {
-
+	public static int FRAME_W = 800;
+	public static int FRAME_H = 600;
+	
 	public static void main(String[] args) {
-
+		JFrame f = new JFrame("Space War");
+		f.setSize(FRAME_W + 8, FRAME_H + 34);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		SnowBrosComponent sc = new SnowBrosComponent();
+		f.add(sc);
+		f.setVisible(true);
 	}
 }
