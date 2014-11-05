@@ -28,7 +28,7 @@ public class SnowBros {
 	public static int FRAME_H = 600;
 	
 	public static void main(String[] args) {
-		JFrame f = new JFrame("Space War");
+		JFrame f = new JFrame("Snow Bros");
 		f.setSize(FRAME_W + 8, FRAME_H + 34);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
