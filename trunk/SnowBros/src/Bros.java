@@ -7,7 +7,9 @@ public class Bros {
 	public static int B_ST_JUMPDOWN = 4;
 	public static int B_WIDTH = 60;
 	public static int B_HEIGHT = 80;
-	public int state;
+	public static int RIGHT = 0;
+	public static int LEFT = 1;
+	public int state, RL;
 	private int x, y, count, startY;
 	private Rectangle bb;
 	
@@ -28,10 +30,12 @@ public class Bros {
 	
 	void MoveRight(){
 		x += 5;
+		RL = RIGHT;
 	}
 	
 	void MoveLeft(){
 		x-= 5;
+		RL = LEFT;
 	}
 	
 	void Jump(){
@@ -40,13 +44,13 @@ public class Bros {
 	}
 	
 	void Jumpup(){
-		y -= 2;
+		y -= 5;
 		if(startY - y >= 50)
 			state = B_ST_JUMPDOWN;
 	}
 	
 	void Jumpdown(){
-		y += 2;
+		y += 5;
 		if(startY == y)
 			state = B_ST_ALIVE;
 	}
@@ -56,7 +60,13 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
+		g.setColor(Color.WHITE);
 		g.fillOval(x-25, y-25, 50, 50);
 		g.fillOval(x-25, y+25, 50, 50);
+		g.setColor(Color.BLACK);
+		g.fillOval(x-15, y-12, 10, 10);
+		g.fillOval(x+5, y-12, 10, 10);
+		g.setColor(Color.RED);
+		g.fillArc(x-8, y-7, 15, 15, 0, 360);
 	}
 }

@@ -6,7 +6,7 @@ public class Missile {
 	public static int M_WIDTH = 20;
 	public static int M_HEIGHT = 30;
 	
-	public int state, RL;
+	public int state;
 	private int x, y, z;
 	private int dx;
 	private int count;
@@ -38,13 +38,13 @@ public class Missile {
 	
 	void moveR() {
 		if(state == M_ST_ALIVE){
-			z += 1;
+			z += 5;
 			x += dx;
 			bb.y = y -M_HEIGHT/2;
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z >= 50){
+		if(z > 50){
 			state = M_ST_DEATH;
 			z = 0;
 		}
@@ -52,13 +52,13 @@ public class Missile {
 	
 	void moveL() {
 		if(state == M_ST_ALIVE){
-			z += 1;
+			z += 5;
 			x -= dx;
 			bb.y = y -M_HEIGHT/2;
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z >= 50){
+		if(z > 50){
 			state = M_ST_DEATH;
 			z = 0;
 		}
