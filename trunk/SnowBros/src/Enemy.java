@@ -4,11 +4,11 @@ import java.awt.Rectangle;
 
 
 public class Enemy {
-	public static int UFO_ST_DEATH = 0;
-	public static int UFO_ST_ALIVE = 1;
-	public static int UFO_ST_BLAST = 2;
-	public static int UFO_WIDTH = 80;
-	public static int UFO_HEIGHT = 30;
+	public static int E_ST_DEATH = 0;
+	public static int E_ST_ALIVE = 1;
+	public static int E_ST_BLAST = 2;
+	public static int E_WIDTH = 80;
+	public static int E_HEIGHT = 30;
 	
 	public int state;
 	private int dr, count;
@@ -17,8 +17,8 @@ public class Enemy {
 	private Rectangle bb;
 	
 	Enemy(){
-		state = UFO_ST_DEATH;
-		bb = new Rectangle(0,0,UFO_WIDTH,UFO_HEIGHT);
+		state = E_ST_DEATH;
+		bb = new Rectangle(0,0,E_WIDTH,E_HEIGHT);
 	}
 	
 	int getState(){
@@ -38,7 +38,7 @@ public class Enemy {
 	}
 	
 	void birth(){
-		state = UFO_ST_ALIVE;
+		state = E_ST_ALIVE;
 		cr1 = Util.randColor();
 		cr2 = Util.randColor();
 		
@@ -59,23 +59,23 @@ public class Enemy {
 		dy = (int) ((ty-y)*30/len);
 		dr = 0;
 		
-		bb.x = (int) (x - UFO_WIDTH/2);
-		bb.y = (int) (y - UFO_HEIGHT/2);
+		bb.x = (int) (x - E_WIDTH/2);
+		bb.y = (int) (y - E_HEIGHT/2);
 	}
 	
 	void blast() {
-		state = UFO_ST_BLAST;
+		state = E_ST_BLAST;
 		count = 15;
 		bb.x = 0;
 		bb.y = 0;
 	}
 	
 	void move(){
-		if(state == UFO_ST_ALIVE){
+		if(state == E_ST_ALIVE){
 			x += dx;
 			y += dy;
 			if(x < -40 || SnowBros.FRAME_W + 40 < x || y < -40 || SnowBros.FRAME_H +40 < y){
-				state = UFO_ST_DEATH;
+				state = E_ST_DEATH;
 			}
 			if(Math.abs(x-tx) < 50 && dr == 0){
 				dr = 1;
@@ -96,25 +96,25 @@ public class Enemy {
 				}
 			}
 			
-			bb.x = (int)x - UFO_WIDTH/2;
-			bb.y = (int)y - UFO_HEIGHT/2;
+			bb.x = (int)x - E_WIDTH/2;
+			bb.y = (int)y - E_HEIGHT/2;
 			
 		}
-		else if ( state == UFO_ST_BLAST){
+		else if ( state == E_ST_BLAST){
 			count--;
 			if(count == 0)
-				state = UFO_ST_DEATH;
+				state = E_ST_DEATH;
 		}
 	}
 	
 	void Draw(Graphics g){
-		if(state == UFO_ST_ALIVE){
+		if(state == E_ST_ALIVE){
 			g.setColor(cr1);
 			g.fillOval((int)x-20, (int)y-15, 40, 30);
 			g.setColor(cr2);
 			g.fillOval((int)x-40, (int)y, 80, 10);
 		}
-		else if(state == UFO_ST_BLAST){
+		else if(state == E_ST_BLAST){
 			for(int i = 1; i < count; i++){
 				g.setColor(Util.randColor(128, 255));
 				int x0 = Util.rand(-30, 30);
