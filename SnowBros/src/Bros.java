@@ -9,8 +9,8 @@ public class Bros {
 	public static int B_HEIGHT = 80;
 	public static int RIGHT = 0;
 	public static int LEFT = 1;
-	public int state, RL;
-	private int x, y, count, startY;
+	public int x, y,state, RL, jumpState;
+	private int count, startY;
 	private Rectangle bb;
 	
 	Bros(){
@@ -40,19 +40,18 @@ public class Bros {
 	
 	void Jump(){
 		startY = y;
+		jumpState = 1;
 		state = B_ST_JUMPUP;
 	}
 	
 	void Jumpup(){
-		y -= 5;
-		if(startY - y >= 50)
-			state = B_ST_JUMPDOWN;
+		y -= 10;
+		if(startY - y >= 150)
+			state = B_ST_ALIVE;
 	}
 	
 	void Jumpdown(){
-		y += 5;
-		if(startY == y)
-			state = B_ST_ALIVE;
+		y += 10;
 	}
 	
 	void Item(){
