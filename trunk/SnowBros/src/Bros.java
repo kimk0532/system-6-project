@@ -46,7 +46,7 @@ public class Bros {
 	
 	void Jumpup(){
 		y -= 10;
-		if(startY - y >= 150)
+		if(startY - y > 150)
 			state = B_ST_ALIVE;
 	}
 	
