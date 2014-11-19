@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
 
 
 class SnowBrosComponent extends JComponent{
@@ -17,24 +19,31 @@ class SnowBrosComponent extends JComponent{
 	SnowBrosComponent(){
 		t = new Timer(30, new TimerHandler());
 		t.start();
+		this.addKeyListener(new KeyHandler());
+		this.setFocusable(true);
 		bros = new Bros();
 		enemy = new Enemy[MAX_ENEMY];
-		for(Enemy e : enemy)
-			e = new Enemy();
+		for(int i = 0; i < MAX_ENEMY; i++)
+			enemy[i] = new Enemy();     
 		myItem = new Item[MAX_ITEM];
-		for(Item i : myItem)
-			i = new Item();
+		for(int i = 0; i < MAX_ITEM; i++)
+			myItem[i] = new Item();
 		myShot = new Missile[MAX_MISSILE];
-		for(Missile m : myShot)
-			m = new Missile();
+		for(int i = 0; i < MAX_MISSILE; i++)
+			myShot[i] = new Missile();
 	}
 	
 	class TimerHandler implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			
+			if(bros.state == Bros.B_ST_JUMPUP)
+				bros.Jumpup();
+			else if(bros.state == Bros.B_ST_JUMPDOWN)
+				bros.Jumpdown();
+			for(Missile m : myShot){
+				if(m.state == Missile.M_ST_ALIVE)
+					m.moveR();
+			}
 			repaint();
 		}
 
@@ -70,9 +79,12 @@ class SnowBrosComponent extends JComponent{
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SnowBros.FRAME_W, SnowBros.FRAME_H);
+		g.setColor(Color.WHITE);
 		bros.Draw(g);
-//		for(Missile m: myShot)
-//			m.Draw(g);
+		for(Missile m : myShot)
+			m.Draw(g);
+		for(Enemy e : enemy)
+			e.Draw(g);
 	}
 }
 

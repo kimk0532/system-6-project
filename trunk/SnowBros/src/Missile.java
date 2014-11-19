@@ -6,14 +6,15 @@ public class Missile {
 	public static int M_WIDTH = 20;
 	public static int M_HEIGHT = 30;
 	
-	int state;
-	private int x, y;
-	private int dy;
+	public int state, RL;
+	private int x, y, z;
+	private int dx;
 	private int count;
 	
 	private Rectangle bb;
 	
 	Missile() {
+		z = 0;
 		state = M_ST_DEATH;
 		bb = new Rectangle(0, 0, M_WIDTH, M_HEIGHT);
 	}
@@ -30,18 +31,36 @@ public class Missile {
 			state = M_ST_ALIVE;
 			this.x = x;
 			this.y = y;
-			dy = -20;
+			dx = -20;
 			bb = new Rectangle(x - M_WIDTH/2, y - M_HEIGHT/2, M_WIDTH, M_HEIGHT);
 		}
 	}
 	
-	void move() {
+	void moveR() {
 		if(state == M_ST_ALIVE){
-			y += dy;
+			z += 1;
+			x += dx;
 			bb.y = y -M_HEIGHT/2;
-			if(y < -40 )
+			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
-			count = (count + 1) % 2;
+		}
+		if(z >= 50){
+			state = M_ST_DEATH;
+			z = 0;
+		}
+	}
+	
+	void moveL() {
+		if(state == M_ST_ALIVE){
+			z += 1;
+			x -= dx;
+			bb.y = y -M_HEIGHT/2;
+			if(x < -40 || x > SnowBros.FRAME_W)
+				state = M_ST_DEATH;
+		}
+		if(z >= 50){
+			state = M_ST_DEATH;
+			z = 0;
 		}
 	}
 	
@@ -51,18 +70,7 @@ public class Missile {
 	
 	void Draw(Graphics g){
 		if(state == M_ST_ALIVE){
-			g.setColor(Color.RED);
-			g.fillOval(x - 4, y - 20, 8, 16);
-			g.setColor(new Color(0, 128, 0));
-			g.fillOval(x - 10, y, 20, 8);
-			g.setColor(new Color(0, 192, 0));
-			g.fillRect(x - 4, y - 12, 8, 22);
-			if( count == 1){
-				g.setColor(Color.RED);
-				g.fillOval(x - 4, y +10, 8, 20);
-				g.setColor(Color.YELLOW);
-				g.fillOval(x - 2, y + 10, 4, 14);
-			}
+			g.fillOval(x, y, M_WIDTH, M_HEIGHT);
 		}
 	}
 }

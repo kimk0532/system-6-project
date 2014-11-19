@@ -3,10 +3,12 @@ import java.awt.*;
 public class Bros {
 	public static int B_ST_ALIVE = 1;
 	public static int B_ST_BLAST = 2;
+	public static int B_ST_JUMPUP = 3;
+	public static int B_ST_JUMPDOWN = 4;
 	public static int B_WIDTH = 60;
 	public static int B_HEIGHT = 80;
-	
-	private int state, x, y, count;
+	public int state;
+	private int x, y, count, startY;
 	private Rectangle bb;
 	
 	Bros(){
@@ -33,7 +35,20 @@ public class Bros {
 	}
 	
 	void Jump(){
-		
+		startY = y;
+		state = B_ST_JUMPUP;
+	}
+	
+	void Jumpup(){
+		y -= 2;
+		if(startY - y >= 50)
+			state = B_ST_JUMPDOWN;
+	}
+	
+	void Jumpdown(){
+		y += 2;
+		if(startY == y)
+			state = B_ST_ALIVE;
 	}
 	
 	void Item(){
@@ -41,7 +56,6 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
-		g.setColor(Color.WHITE);
 		g.fillOval(x-25, y-25, 50, 50);
 		g.fillOval(x-25, y+25, 50, 50);
 	}
