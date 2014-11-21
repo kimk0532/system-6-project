@@ -4,7 +4,6 @@ public class Bros {
 	public static int B_ST_ALIVE = 1;
 	public static int B_ST_BLAST = 2;
 	public static int B_ST_JUMPUP = 3;
-	public static int B_ST_JUMPDOWN = 4;
 	public static int B_WIDTH = 60;
 	public static int B_HEIGHT = 80;
 	public static int RIGHT = 0;
@@ -29,12 +28,12 @@ public class Bros {
 	}
 	
 	void MoveRight(){
-		x += 5;
+		x += 10;
 		RL = RIGHT;
 	}
 	
 	void MoveLeft(){
-		x-= 5;
+		x-= 10;
 		RL = LEFT;
 	}
 	
@@ -44,13 +43,13 @@ public class Bros {
 		state = B_ST_JUMPUP;
 	}
 	
-	void Jumpup(){
+	void JumpUp(){
 		y -= 10;
-		if(startY - y > 150)
+		if(startY - y >= 100)
 			state = B_ST_ALIVE;
 	}
 	
-	void Jumpdown(){
+	void JumpDown(){
 		y += 10;
 	}
 	

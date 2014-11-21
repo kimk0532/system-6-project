@@ -44,7 +44,7 @@ public class Missile {
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z > 50){
+		if(z > 75){
 			state = M_ST_DEATH;
 			z = 0;
 		}
@@ -58,7 +58,7 @@ public class Missile {
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z > 50){
+		if(z > 75){
 			state = M_ST_DEATH;
 			z = 0;
 		}

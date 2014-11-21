@@ -22,6 +22,7 @@ class SnowBrosComponent extends JComponent{
 	private Item[] myItem;
 	private Missile[] myShot;
 	public int[][][] map;
+	int shotDelay,brosright,brosleft,brosdown;
 	
 	SnowBrosComponent(){
 		t = new Timer(30, new TimerHandler());
@@ -41,14 +42,24 @@ class SnowBrosComponent extends JComponent{
 		map = new int[STAGE][X][Y];
 		for(int i = 0; i < X; i++){
 			for(int j = 0; j < Y; j++){
-				if(i < 10 || i > X - 10)
-					map[STAGE1][i][j] = 2;
-				if(j >= 800 && j < 810 && i <X -100)
+				
+				if(j >= 590 && j < 600 && i <X -100)
+					map[STAGE1][i][j] = 1;
+				else if(j >= 490 && j < 500 && i > 100)
+					map[STAGE1][i][j] = 1;
+				else if(j >= 390 && j < 400 && i < X - 100)
+					map[STAGE1][i][j] = 1;
+				else if(j >= 290 && j < 300 && i > 100)
+					map[STAGE1][i][j] = 1;
+				else if(j >= 190 && j < 200 && i < X - 100)
 					map[STAGE1][i][j] = 1;
 				else
 					map[STAGE1][i][j] = 0;
+				if(i < 10 || i > X - 10)
+					map[STAGE1][i][j] = 2;
 				if(j <=Y-1 && j > Y-11)
 					map[STAGE1][i][j] = 1;
+				
 			}
 		}
 	}
@@ -57,12 +68,13 @@ class SnowBrosComponent extends JComponent{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(bros.state == Bros.B_ST_JUMPUP)
-				bros.Jumpup();
+				bros.JumpUp();
 			else if(bros.state == Bros.B_ST_ALIVE){
-				if(map[STAGE1][bros.x][bros.y+75] == 1)
+				if(map[STAGE1][bros.x][bros.y+75] == 1){
 					bros.jumpState = 0;
+				}
 				else
-					bros.Jumpdown();
+					bros.JumpDown();
 			}
 			for(Missile m : myShot){
 				if(m.state == Missile.M_ST_ALIVE){
@@ -72,31 +84,66 @@ class SnowBrosComponent extends JComponent{
 						m.moveR();
 				}
 			}
+			if(shotDelay > 0)
+				shotDelay -= 1;
+			if(enemy[0].state == Enemy.E_ST_DEATH)
+				enemy[0].birth();
+			enemy[0].move();
+			if(brosright == 1){
+				if(map[STAGE1][bros.x+25][bros.y] == 2)
+					;
+				else
+					bros.MoveRight();
+			}
+			else if(brosleft == 1){
+				if(map[STAGE1][bros.x-25][bros.y] == 2)
+					;
+				else
+					bros.MoveLeft();
+			}
 			repaint();
 		}
 
 	}
 
 	class KeyHandler extends KeyAdapter {
-		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int code = e.getKeyCode();
+			if(code == KeyEvent.VK_RIGHT)
+				brosright = 0;
+			else if (code == KeyEvent.VK_LEFT)
+				brosleft = 0;
+			else if (code == KeyEvent.VK_DOWN)
+				brosdown = 0;
+		}
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			if(code == KeyEvent.VK_RIGHT){
-				bros.MoveRight();
-			}
-			else if(code == KeyEvent.VK_LEFT){
-				bros.MoveLeft();
-			}
+			if(code == KeyEvent.VK_RIGHT)
+				brosright = 1;
+			else if(code == KeyEvent.VK_LEFT)
+				brosleft = 1;
+			else if(code == KeyEvent.VK_DOWN)
+				brosdown = 1;
 			if(code == KeyEvent.VK_CONTROL){
-				if(bros.jumpState == 0)
-					bros.Jump();
+				if(brosdown == 0){
+					if(bros.jumpState == 0)
+						bros.Jump();
+				}
+				else if(brosdown == 1){
+					if(bros.y < SnowBros.FRAME_H-100)
+						bros.JumpDown();
+				}
 			}
 			else if(code == KeyEvent.VK_SPACE){
 				for(int i = 0; i < MAX_MISSILE; i++){
-					if(myShot[i].state == Missile.M_ST_DEATH){
-						myShot[i].shot(bros.getX(), bros.getY());
-						break;
+					if(shotDelay == 0){
+						if(myShot[i].state == Missile.M_ST_DEATH){
+							myShot[i].shot(bros.getX(), bros.getY());
+							shotDelay = 10;
+							break;
+						}
 					}
 				}
 			}
@@ -107,7 +154,7 @@ class SnowBrosComponent extends JComponent{
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, SnowBros.FRAME_W, SnowBros.FRAME_H);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.YELLOW);
 		for(int i = 0; i < X; i++){
 			for(int j = 0; j < Y; j++){
 				if(map[STAGE1][i][j] == 1)
@@ -124,8 +171,8 @@ class SnowBrosComponent extends JComponent{
 }
 
 public class SnowBros {
-	public static int FRAME_W = 1400;
-	public static int FRAME_H = 900;
+	public static int FRAME_W = 1000;
+	public static int FRAME_H = 700;
 	
 	public static void main(String[] args) {
 		JFrame f = new JFrame("Snow Bros");
