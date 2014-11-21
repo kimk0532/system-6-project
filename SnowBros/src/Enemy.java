@@ -12,8 +12,7 @@ public class Enemy {
 	public static int E_HEIGHT = 100;
 	
 	public int state, damage;
-	private int dr, count;
-	private int x, y, dx, dy, tx, ty, len;
+	private int x, y, dx, tx;
 	private Rectangle bb;
 	
 	Enemy(){
@@ -50,12 +49,11 @@ public class Enemy {
 	
 	void blast() {
 		state = E_ST_BLAST;
-		count = 15;
 		bb.x = 0;
 		bb.y = 0;
 	}
 	
-	void move(){
+	void Move(){
 		if(state == E_ST_ALIVE){
 			x += dx;
 			if(Math.abs(tx-x) < 100){
@@ -73,9 +71,7 @@ public class Enemy {
 			
 		}
 		else if ( state == E_ST_BLAST){
-			count--;
-			if(count == 0)
-				state = E_ST_DEATH;
+			
 		}
 	}
 	

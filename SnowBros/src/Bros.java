@@ -9,7 +9,7 @@ public class Bros {
 	public static int RIGHT = 0;
 	public static int LEFT = 1;
 	public int x, y,state, RL, jumpState;
-	private int count, startY;
+	private int startY;
 	private Rectangle bb;
 	
 	Bros(){

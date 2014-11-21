@@ -9,7 +9,6 @@ public class Missile {
 	public int state;
 	private int x, y, z;
 	private int dx;
-	private int count;
 	
 	private Rectangle bb;
 	
@@ -26,7 +25,7 @@ public class Missile {
 		return bb;
 	}
 	
-	void shot (int x, int y){
+	void Shot (int x, int y){
 		state = M_ST_ALIVE;
 		this.x = x;
 		this.y = y-25;
@@ -34,7 +33,7 @@ public class Missile {
 		bb = new Rectangle(x - M_WIDTH/2, y - M_HEIGHT/2, M_WIDTH, M_HEIGHT);
 	}
 	
-	void moveR() {
+	void MoveR() {
 		if(state == M_ST_ALIVE){
 			z += 5;
 			x += dx;
@@ -49,7 +48,7 @@ public class Missile {
 		}
 	}
 	
-	void moveL() {
+	void MoveL() {
 		if(state == M_ST_ALIVE){
 			z += 5;
 			x -= dx;
