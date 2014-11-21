@@ -86,9 +86,12 @@ class SnowBrosComponent extends JComponent{
 			}
 			if(shotDelay > 0)
 				shotDelay -= 1;
-			if(enemy[0].state == Enemy.E_ST_DEATH)
-				enemy[0].birth();
-			enemy[0].move();
+			for(int i = 0; i < MAX_ENEMY; i++){
+				if(enemy[i].state == Enemy.E_ST_DEATH)
+					enemy[i].birth(i);
+				else
+					enemy[i].move();
+			}
 			if(brosright == 1){
 				if(map[STAGE1][bros.x+25][bros.y] == 2)
 					;
@@ -161,12 +164,13 @@ class SnowBrosComponent extends JComponent{
 					g.fillRect(i, j, 1, 1);
 			}
 		}
-		bros.Draw(g);
+		
 		g.setColor(Color.WHITE);
 		for(Missile m : myShot)
 			m.Draw(g);
 		for(Enemy e : enemy)
 			e.Draw(g);
+		bros.Draw(g);
 	}
 }
 
