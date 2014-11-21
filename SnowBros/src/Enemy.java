@@ -34,12 +34,12 @@ public class Enemy {
 		return bb;
 	}
 	
-	void birth(){
+	void birth(int layer){
 		state = E_ST_ALIVE;
 		x = SnowBros.FRAME_W/3;
 		dx = 5;
 		tx = SnowBros.FRAME_W - 50;
-		y = SnowBros.FRAME_H - 80;
+		y = SnowBros.FRAME_H - 80 - (layer * 100);
 		bb.x = (int) (x - E_WIDTH/2);
 		bb.y = (int) (y - E_HEIGHT/2);
 	}
