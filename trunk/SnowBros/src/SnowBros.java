@@ -81,9 +81,9 @@ class SnowBrosComponent extends JComponent{
 			for(Missile m : myShot){
 				if(m.state == Missile.M_ST_ALIVE){
 					if(bros.RL == Bros.RIGHT)
-						m.moveL();
+						m.MoveL();
 					else if(bros.RL == Bros.LEFT)
-						m.moveR();
+						m.MoveR();
 					for(int i = 0; i < MAX_ENEMY; i++){
 						if(enemy[i].getBBox().intersects(m.getBBox())){
 							enemy[i].state = Enemy.E_ST_DAMAGE;
@@ -108,7 +108,7 @@ class SnowBrosComponent extends JComponent{
 					}
 				}
 				else
-					enemy[i].move();
+					enemy[i].Move();
 				if(warm[i] > 0)
 					warm[i] -= 1;
 				if(enemy[i].state == Enemy.E_ST_ALIVE){
@@ -167,7 +167,7 @@ class SnowBrosComponent extends JComponent{
 				for(int i = 0; i < MAX_MISSILE; i++){
 					if(shotDelay == 0){
 						if(myShot[i].state == Missile.M_ST_DEATH){
-							myShot[i].shot(bros.getX(), bros.getY());
+							myShot[i].Shot(bros.getX(), bros.getY());
 							shotDelay = 10;
 							break;
 						}
