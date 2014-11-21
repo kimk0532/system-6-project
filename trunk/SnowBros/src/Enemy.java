@@ -1,19 +1,16 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 
 
 public class Enemy {
 	public static int E_ST_DEATH = 0;
 	public static int E_ST_ALIVE = 1;
 	public static int E_ST_BLAST = 2;
-	public static int E_WIDTH = 80;
-	public static int E_HEIGHT = 30;
+	public static int E_WIDTH = 50;
+	public static int E_HEIGHT = 100;
 	
 	public int state;
 	private int dr, count;
-	private Color cr1, cr2;
-	private double x, y, dx, dy, tx, ty, len;
+	private int x, y, dx, dy, tx, ty, len;
 	private Rectangle bb;
 	
 	Enemy(){
@@ -39,26 +36,10 @@ public class Enemy {
 	
 	void birth(){
 		state = E_ST_ALIVE;
-		cr1 = Util.randColor();
-		cr2 = Util.randColor();
-		
-		if(Util.prob100(100)){
-			x = -40;
-			dx = Util.rand(5, 10);
-		}
-		
-		else {
-			x = SnowBros.FRAME_W + 40;
-			dx = -Util.rand(5, 10);
-		}
-		tx = SnowBros.FRAME_W;
-		ty = 0;
-		y = 0;
-		len = Math.sqrt(Math.pow(tx-x, 2) + Math.pow(ty-y, 2));
-		dx = (int) ((tx-x)*30/len);
-		dy = (int) ((ty-y)*30/len);
-		dr = 0;
-		
+		x = SnowBros.FRAME_W/3;
+		dx = 5;
+		tx = SnowBros.FRAME_W - 50;
+		y = SnowBros.FRAME_H - 80;
 		bb.x = (int) (x - E_WIDTH/2);
 		bb.y = (int) (y - E_HEIGHT/2);
 	}
@@ -73,31 +54,18 @@ public class Enemy {
 	void move(){
 		if(state == E_ST_ALIVE){
 			x += dx;
-			y += dy;
-			if(x < -40 || SnowBros.FRAME_W + 40 < x || y < -40 || SnowBros.FRAME_H +40 < y){
-				state = E_ST_DEATH;
-			}
-			if(Math.abs(x-tx) < 50 && dr == 0){
-				dr = 1;
-				ty += 100;
-				dx = 0;
-				dy = (int) ((ty-y)*100/len);
-			}
-			else if(Math.abs(y-ty) < 50 && dr == 1){
-				dr = 0;
-				dy = 0;
-				if(tx == SnowBros.FRAME_W){
-					tx = 0;
-					dx = (int) ((tx-x)*30/len);
+			if(Math.abs(tx-x) < 100){
+				if(tx > SnowBros.FRAME_W/2){
+					tx = 50;
+					dx = -5;
 				}
-				else if (tx == 0){
-					tx = SnowBros.FRAME_W;
-					dx = (int) ((tx-x)*30/len);
+				else{
+					tx = SnowBros.FRAME_W-50;
+					dx = 5;
 				}
 			}
-			
-			bb.x = (int)x - E_WIDTH/2;
-			bb.y = (int)y - E_HEIGHT/2;
+			bb.x = x - E_WIDTH/2;
+			bb.y = y - E_HEIGHT/2;
 			
 		}
 		else if ( state == E_ST_BLAST){
@@ -109,19 +77,9 @@ public class Enemy {
 	
 	void Draw(Graphics g){
 		if(state == E_ST_ALIVE){
-			g.setColor(cr1);
-			g.fillOval((int)x-20, (int)y-15, 40, 30);
-			g.setColor(cr2);
-			g.fillOval((int)x-40, (int)y, 80, 10);
-		}
-		else if(state == E_ST_BLAST){
-			for(int i = 1; i < count; i++){
-				g.setColor(Util.randColor(128, 255));
-				int x0 = Util.rand(-30, 30);
-				int y0 = Util.rand(-30, 30);
-				int r0 = Util.rand(5, 30);
-				g.fillOval((int)x - x0 - r0/2, (int)y - y0 - r0/2, r0, r0);
-			}
+			g.setColor(Color.RED);
+			g.fillOval(x-25, y-25, 50, 50);
+			g.fillOval(x-25, y+25, 50, 50);
 		}
 	}
 }
