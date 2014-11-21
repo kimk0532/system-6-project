@@ -27,20 +27,19 @@ public class Missile {
 	}
 	
 	void shot (int x, int y){
-		if(state == M_ST_DEATH){
-			state = M_ST_ALIVE;
-			this.x = x;
-			this.y = y;
-			dx = -20;
-			bb = new Rectangle(x - M_WIDTH/2, y - M_HEIGHT/2, M_WIDTH, M_HEIGHT);
-		}
+		state = M_ST_ALIVE;
+		this.x = x;
+		this.y = y-25;
+		dx = -20;
+		bb = new Rectangle(x - M_WIDTH/2, y - M_HEIGHT/2, M_WIDTH, M_HEIGHT);
 	}
 	
 	void moveR() {
 		if(state == M_ST_ALIVE){
 			z += 5;
 			x += dx;
-			bb.y = y -M_HEIGHT/2;
+			bb.x = x - M_WIDTH/2;
+			bb.y = y - M_HEIGHT/2;
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
@@ -54,7 +53,8 @@ public class Missile {
 		if(state == M_ST_ALIVE){
 			z += 5;
 			x -= dx;
-			bb.y = y -M_HEIGHT/2;
+			bb.x = x - M_WIDTH/2;
+			bb.y = y - M_HEIGHT/2;
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
@@ -64,8 +64,9 @@ public class Missile {
 		}
 	}
 	
-	void blast(){
+	void Blast(){
 		state = M_ST_DEATH;
+		z = 0;
 	}
 	
 	void Draw(Graphics g){
