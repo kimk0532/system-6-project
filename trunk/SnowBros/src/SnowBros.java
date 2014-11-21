@@ -111,6 +111,10 @@ class SnowBrosComponent extends JComponent{
 					enemy[i].move();
 				if(warm[i] > 0)
 					warm[i] -= 1;
+				if(enemy[i].state == Enemy.E_ST_ALIVE){
+					if(bros.getBBox().intersects(enemy[i].getBBox()))
+						bros.Blast();
+				}
 			}
 			if(brosright == 1){
 				if(map[STAGE1][bros.x+25][bros.y] == 2)

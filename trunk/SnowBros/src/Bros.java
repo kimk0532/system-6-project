@@ -22,35 +22,57 @@ public class Bros {
 	int getState() { return state; }
 	int getX() { return x; }
 	int getY() { return y; }
+
+	Rectangle getBBox(){
+		return bb;
+	}
 	
 	void StartBros(){
-		
+		state = B_ST_ALIVE;
+		x = SnowBros.FRAME_W / 2;
+		y = SnowBros.FRAME_H - 55;
+		bb = new Rectangle(x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT);
 	}
 	
 	void MoveRight(){
 		x += 10;
 		RL = RIGHT;
+		bb.x = x - B_WIDTH/2;
+		bb.y = y - B_HEIGHT/2;
 	}
 	
 	void MoveLeft(){
 		x-= 10;
 		RL = LEFT;
+		bb.x = x - B_WIDTH/2;
+		bb.y = y - B_HEIGHT/2;
 	}
 	
 	void Jump(){
 		startY = y;
 		jumpState = 1;
 		state = B_ST_JUMPUP;
+		bb.x = x - B_WIDTH/2;
+		bb.y = y - B_HEIGHT/2;
 	}
 	
 	void JumpUp(){
 		y -= 10;
 		if(startY - y >= 100)
 			state = B_ST_ALIVE;
+		bb.x = x - B_WIDTH/2;
+		bb.y = y - B_HEIGHT/2;
 	}
 	
 	void JumpDown(){
 		y += 10;
+		bb.x = x - B_WIDTH/2;
+		bb.y = y - B_HEIGHT/2;
+	}
+	
+	void Blast(){
+		state = B_ST_BLAST;
+		StartBros();
 	}
 	
 	void Item(){
@@ -58,13 +80,37 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
-		g.setColor(Color.WHITE);
-		g.fillOval(x-25, y-50, 50, 50);
-		g.fillOval(x-25, y, 50, 50);
-		g.setColor(Color.BLACK);
-		g.fillOval(x-15, y-30, 10, 10);
-		g.fillOval(x+5, y-30, 10, 10);
-		g.setColor(Color.RED);
-		g.fillArc(x-8, y-22, 15, 15, 0, 360);
+		if(startY-y == 30 || startY-y == 70){
+			if(state == B_ST_JUMPUP){
+				g.setColor(Color.WHITE);
+				g.fillOval(x-50, y-25, 50, 50);
+				g.fillOval(x, y-25, 50, 50);
+				g.setColor(Color.BLACK);
+				g.fillOval(x-40, y-10, 10, 10);
+				g.fillOval(x-40, y+10, 10, 10);
+				g.setColor(Color.RED);
+				g.fillArc(x-8, y-12, 15, 15, 0, 360);
+			}
+			else{
+				g.setColor(Color.WHITE);
+				g.fillOval(x-25, y-50, 50, 50);
+				g.fillOval(x-25, y, 50, 50);
+				g.setColor(Color.BLACK);
+				g.fillOval(x-15, y-30, 10, 10);
+				g.fillOval(x+5, y-30, 10, 10);
+				g.setColor(Color.RED);
+				g.fillArc(x-8, y-22, 15, 15, 0, 360);
+			}
+		}
+		else{
+			g.setColor(Color.WHITE);
+			g.fillOval(x-25, y-50, 50, 50);
+			g.fillOval(x-25, y, 50, 50);
+			g.setColor(Color.BLACK);
+			g.fillOval(x-15, y-30, 10, 10);
+			g.fillOval(x+5, y-30, 10, 10);
+			g.setColor(Color.RED);
+			g.fillArc(x-8, y-22, 15, 15, 0, 360);
+		}
 	}
 }
