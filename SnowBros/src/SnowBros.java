@@ -22,7 +22,8 @@ class SnowBrosComponent extends JComponent{
 	private Item[] myItem;
 	private Missile[] myShot;
 	public int[][][] map;
-	int shotDelay,brosright,brosleft,brosdown;
+	public int[] warm;
+	int shotDelay, brosright, brosleft, brosdown;
 	
 	SnowBrosComponent(){
 		t = new Timer(30, new TimerHandler());
@@ -39,6 +40,7 @@ class SnowBrosComponent extends JComponent{
 		myShot = new Missile[MAX_MISSILE];
 		for(int i = 0; i < MAX_MISSILE; i++)
 			myShot[i] = new Missile();
+		warm = new int[MAX_ENEMY];
 		map = new int[STAGE][X][Y];
 		for(int i = 0; i < X; i++){
 			for(int j = 0; j < Y; j++){
@@ -70,7 +72,7 @@ class SnowBrosComponent extends JComponent{
 			if(bros.state == Bros.B_ST_JUMPUP)
 				bros.JumpUp();
 			else if(bros.state == Bros.B_ST_ALIVE){
-				if(map[STAGE1][bros.x][bros.y+75] == 1){
+				if(map[STAGE1][bros.x][bros.y+50] == 1){
 					bros.jumpState = 0;
 				}
 				else
@@ -82,6 +84,14 @@ class SnowBrosComponent extends JComponent{
 						m.moveL();
 					else if(bros.RL == Bros.LEFT)
 						m.moveR();
+					for(int i = 0; i < MAX_ENEMY; i++){
+						if(enemy[i].getBBox().intersects(m.getBBox())){
+							enemy[i].state = Enemy.E_ST_DAMAGE;
+							enemy[i].Damage();
+							warm[i] = 100;
+							m.Blast();
+						}
+					}
 				}
 			}
 			if(shotDelay > 0)
@@ -89,8 +99,18 @@ class SnowBrosComponent extends JComponent{
 			for(int i = 0; i < MAX_ENEMY; i++){
 				if(enemy[i].state == Enemy.E_ST_DEATH)
 					enemy[i].birth(i);
+				else if(enemy[i].state == Enemy.E_ST_DAMAGE){
+					if(warm[i] == 0){
+						enemy[i].damage -= 1;
+						if(enemy[i].damage == 0)
+							enemy[i].state = Enemy.E_ST_ALIVE;
+						warm[i] = 100;
+					}
+				}
 				else
 					enemy[i].move();
+				if(warm[i] > 0)
+					warm[i] -= 1;
 			}
 			if(brosright == 1){
 				if(map[STAGE1][bros.x+25][bros.y] == 2)

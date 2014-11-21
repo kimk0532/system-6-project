@@ -4,8 +4,8 @@ public class Bros {
 	public static int B_ST_ALIVE = 1;
 	public static int B_ST_BLAST = 2;
 	public static int B_ST_JUMPUP = 3;
-	public static int B_WIDTH = 60;
-	public static int B_HEIGHT = 80;
+	public static int B_WIDTH = 50;
+	public static int B_HEIGHT = 100;
 	public static int RIGHT = 0;
 	public static int LEFT = 1;
 	public int x, y,state, RL, jumpState;
@@ -15,7 +15,7 @@ public class Bros {
 	Bros(){
 		state = B_ST_ALIVE;
 		x = SnowBros.FRAME_W / 2;
-		y = SnowBros.FRAME_H - 80;
+		y = SnowBros.FRAME_H - 55;
 		bb = new Rectangle(x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT);
 	}
 	
@@ -59,12 +59,12 @@ public class Bros {
 	
 	void Draw(Graphics g){
 		g.setColor(Color.WHITE);
-		g.fillOval(x-25, y-25, 50, 50);
-		g.fillOval(x-25, y+25, 50, 50);
+		g.fillOval(x-25, y-50, 50, 50);
+		g.fillOval(x-25, y, 50, 50);
 		g.setColor(Color.BLACK);
-		g.fillOval(x-15, y-12, 10, 10);
-		g.fillOval(x+5, y-12, 10, 10);
+		g.fillOval(x-15, y-30, 10, 10);
+		g.fillOval(x+5, y-30, 10, 10);
 		g.setColor(Color.RED);
-		g.fillArc(x-8, y-7, 15, 15, 0, 360);
+		g.fillArc(x-8, y-22, 15, 15, 0, 360);
 	}
 }
