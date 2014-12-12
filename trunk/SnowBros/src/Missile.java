@@ -9,6 +9,7 @@ public class Missile {
 	public int state;
 	private int x, y, z;
 	private int dx;
+	int di; //이동거리
 	
 	private Rectangle bb;
 	
@@ -16,6 +17,7 @@ public class Missile {
 		z = 0;
 		state = M_ST_DEATH;
 		bb = new Rectangle(0, 0, M_WIDTH, M_HEIGHT);
+		di = 75;
 	}
 	
 	int getState(){
@@ -29,7 +31,7 @@ public class Missile {
 		state = M_ST_ALIVE;
 		this.x = x;
 		this.y = y-25;
-		dx = -20;
+		dx = 15; //이동거리
 		bb = new Rectangle(x - M_WIDTH/2, y - M_HEIGHT/2, M_WIDTH, M_HEIGHT);
 	}
 	
@@ -42,7 +44,7 @@ public class Missile {
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z > 75){
+		if(z > di){
 			state = M_ST_DEATH;
 			z = 0;
 		}
@@ -57,7 +59,7 @@ public class Missile {
 			if(x < -40 || x > SnowBros.FRAME_W)
 				state = M_ST_DEATH;
 		}
-		if(z > 75){
+		if(z > di){
 			state = M_ST_DEATH;
 			z = 0;
 		}
