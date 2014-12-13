@@ -31,6 +31,8 @@ class SnowBrosComponent extends JComponent{
 	public static int X = SnowBros.FRAME_W;
 	public static int Y = SnowBros.FRAME_H;
 	
+	public static int STATE; //게임 상태
+	
 	private Timer t;
 	private Bros bros;
 	private Enemy[] enemy;
@@ -44,7 +46,7 @@ class SnowBrosComponent extends JComponent{
 	private boolean ball[];
 	private int noshot, k;
 	private int rolldir[];
-	private int state; //게임 상태
+	
 	private int score; //점수
 	private int life; //라이프
 	private int count; //애니메이션 카운터
@@ -111,7 +113,7 @@ class SnowBrosComponent extends JComponent{
 					map[STAGE1][i][j] = 1;
 			}
 		}
-		state = TITLE;
+		STATE = TITLE;
 		count = 0;
 		
 	}
@@ -160,7 +162,7 @@ class SnowBrosComponent extends JComponent{
 						bros.Blast();
 						life--; //LIFE감소
 						if(life==0){
-							state = ENDING;
+							STATE = ENDING;
 						}
 					}
 				}
@@ -294,14 +296,14 @@ class SnowBrosComponent extends JComponent{
 		@Override
 		public void keyReleased(KeyEvent e) {
 			int code = e.getKeyCode();
-			if(state == TITLE){ 
+			if(STATE == TITLE){ 
 				if(code == KeyEvent.VK_SPACE){ //게임 시작
-					state = STAGE1;
+					STATE = STAGE1;
 					score = 0;
 					life = 3;
 				}
 			}
-			else if(state == STAGE1){ //STATE1일때
+			else if(STATE == STAGE1){ //STATE1일때
 				if(code == KeyEvent.VK_RIGHT)
 					brosright = 0;
 				else if (code == KeyEvent.VK_LEFT)
@@ -309,9 +311,9 @@ class SnowBrosComponent extends JComponent{
 				else if (code == KeyEvent.VK_DOWN)
 					brosdown = 0;
 			}
-			else if (state == ENDING){
+			else if (STATE == ENDING){
 				if(code == KeyEvent.VK_ENTER){ //제목화면으로 이동
-					state = TITLE;
+					STATE = TITLE;
 				}
 			}
 			repaint();
@@ -319,7 +321,7 @@ class SnowBrosComponent extends JComponent{
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			if(state == STAGE1){ //STAGE1일때
+			if(STATE == STAGE1){ //STAGE1일때
 				if(code == KeyEvent.VK_RIGHT)
 					brosright = 1;
 				else if(code == KeyEvent.VK_LEFT)
@@ -378,7 +380,7 @@ class SnowBrosComponent extends JComponent{
 //		g.setColor(Color.BLACK);
 //		g.fillRect(0, 0, X, Y);
 		//상태별 문자 출력
-		if(state == TITLE){
+		if(STATE == TITLE){
 			int tx = X/2 - 300;
 			int ty = Y/2 - 50;
 			int i;
@@ -399,7 +401,7 @@ class SnowBrosComponent extends JComponent{
 				g.drawString("PRESS SPACE KEY", X/2-150, Y/4*3);
 			}
 		}
-		else if (state == STAGE1){
+		else if (STATE == STAGE1){
 			g.setColor(Color.YELLOW);
 			for(int i = 0; i < X; i++){
 				for(int j = 0; j < Y; j++){
@@ -423,7 +425,7 @@ class SnowBrosComponent extends JComponent{
 			g.drawString("SCORE: " + score, 20, 30);
 			g.drawString(" LIFE: " + life, 20, 60);
 		}
-		else if(state == ENDING){
+		else if(STATE == ENDING){
 			Font font = new Font(Font.SANS_SERIF, Font.BOLD, 36);
 			g.setFont(font);
 			g.setColor(Color.WHITE);
