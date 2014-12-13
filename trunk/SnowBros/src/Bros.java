@@ -1,20 +1,37 @@
 import java.awt.*;
 
 public class Bros {
+	public static int B_ST_DEATH = 0;
 	public static int B_ST_ALIVE = 1;
 	public static int B_ST_BLAST = 2;
 	public static int B_ST_JUMPUP = 3;
 	public static int B_WIDTH = 50;
 	public static int B_HEIGHT = 100;
+	public static int BIRTH = 1;
+	public static int BLAST = 2;
+	public static int MOVE_R = 3;
+	public static int MOVE_L = 4;
+	public static int SMOVE_R = 5;
+	public static int SMOVE_L = 6;
+	public static int JUMP_R = 7;
+	public static int JUMP_L = 8;
+	public static int SHOT_R = 9;
+	public static int SHOT_L = 10;
+	public static int ROLL_R = 11;
+	public static int ROLL_L = 12;
+	public static int NEXT = 13;
+	
+	
 	public static int RIGHT = 1;
 	public static int LEFT = -1;
-	public int x, y,state, RL, jumpState;
+	public int x, y,state, RL, jumpState, motion;
 	private int startY;
 	private Rectangle bb;
 	int xi,yi; //speed æ∆¿Ã≈€
 	
 	Bros(){
-		state = B_ST_ALIVE;
+		motion = 0;
+		state = B_ST_DEATH;
 		x = SnowBros.FRAME_W / 2;
 		y = SnowBros.FRAME_H - 55;
 		bb = new Rectangle(x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT);
@@ -31,6 +48,7 @@ public class Bros {
 	}
 	
 	void StartBros(){
+		motion = BIRTH;
 		state = B_ST_ALIVE;
 		x = SnowBros.FRAME_W / 2;
 		y = SnowBros.FRAME_H - 55;
@@ -38,6 +56,7 @@ public class Bros {
 	}
 	
 	void MoveRight(){
+		motion = MOVE_R;
 		x += xi;
 		RL = RIGHT;
 		bb.x = x - B_WIDTH/2;
@@ -45,6 +64,7 @@ public class Bros {
 	}
 	
 	void MoveLeft(){
+		motion = MOVE_L;
 		x-= xi;
 		RL = LEFT;
 		bb.x = x - B_WIDTH/2;
@@ -52,6 +72,10 @@ public class Bros {
 	}
 	
 	void Jump(){
+		if(RL == RIGHT)
+			motion = JUMP_R;
+		else if(RL == LEFT)
+			motion = JUMP_L;
 		startY = y;
 		jumpState = 1;
 		state = B_ST_JUMPUP;
@@ -74,6 +98,7 @@ public class Bros {
 	}
 	
 	void Blast(){
+		motion = BLAST;
 		state = B_ST_BLAST;
 		StartBros();
 	}
@@ -83,17 +108,14 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
-		if(SnowBrosComponent.STATE == SnowBrosComponent.STAGE1 || 
-				SnowBrosComponent.STATE == SnowBrosComponent.STAGE2 || 
-				SnowBrosComponent.STATE == SnowBrosComponent.STAGE3){
-			g.setColor(Color.WHITE);
-			g.fillOval(x-25, y-50, 50, 50);
-			g.fillOval(x-25, y, 50, 50);
-			g.setColor(Color.BLACK);
-			g.fillOval(x-15, y-30, 10, 10);
-			g.fillOval(x+5, y-30, 10, 10);
-			g.setColor(Color.RED);
-			g.fillArc(x-8, y-22, 15, 15, 0, 360);
-		}
+		g.drawImage(SnowBrosComponent.bros_normal_l,x,y,null);
+//		g.setColor(Color.WHITE);
+//		g.fillOval(x-25, y-50, 50, 50);
+//		g.fillOval(x-25, y, 50, 50);
+//		g.setColor(Color.BLACK);
+//		g.fillOval(x-15, y-30, 10, 10);
+//		g.fillOval(x+5, y-30, 10, 10);
+//		g.setColor(Color.RED);
+//		g.fillArc(x-8, y-22, 15, 15, 0, 360);
 	}
 }
