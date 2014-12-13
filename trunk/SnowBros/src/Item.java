@@ -78,25 +78,21 @@ public class Item {
 	}
 	
 	void Draw(Graphics g){
+		
 		if(state == LIFE){
-			g.setColor(Color.red);
-			g.fillRect(x, y, I_WIDTH, I_HEIGHT);
+			g.drawImage(SnowBrosComponent.item_red, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 		if(state == SPEED){
-			g.setColor(Color.blue);
-			g.fillRect(x, y, I_WIDTH, I_HEIGHT);
+			g.drawImage(SnowBrosComponent.item_green, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 		if(state == STRONG){
-			g.setColor(Color.cyan);
-			g.fillRect(x, y, I_WIDTH, I_HEIGHT);
+			g.drawImage(SnowBrosComponent.item_blue, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 		if(state == DISTANCE){
-			g.setColor(Color.yellow);
-			g.fillRect(x, y, I_WIDTH, I_HEIGHT);
+			g.drawImage(SnowBrosComponent.item_yellow, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 		if(state == SCORE){
-			g.setColor(Color.green);
-			g.fillRect(x, y, I_WIDTH, I_HEIGHT);
+			g.drawImage(SnowBrosComponent.item_green, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 	}
 }

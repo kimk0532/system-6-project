@@ -20,11 +20,12 @@ public class Bros {
 	public static int ROLL_R = 11;
 	public static int ROLL_L = 12;
 	public static int NEXT = 13;
-	
+	public static int JUMPDOWN_R = 14;
+	public static int JUMPDOWN_L = 15;
 	
 	public static int RIGHT = 1;
 	public static int LEFT = -1;
-	public int x, y,state, RL, jumpState, motion;
+	public int x, y,state, RL, jumpState, motion, imagecount, image;
 	private int startY;
 	private Rectangle bb;
 	int xi,yi; //speed ¾ÆÀÌÅÛ
@@ -32,10 +33,10 @@ public class Bros {
 	Bros(){
 		motion = 0;
 		state = B_ST_DEATH;
-		x = SnowBros.FRAME_W / 2;
-		y = SnowBros.FRAME_H - 55;
+		x = 0;
+		y = 0;
 		bb = new Rectangle(x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT);
-		xi = 10;
+		xi = 7;
 		yi = 10;
 	}
 	
@@ -56,7 +57,10 @@ public class Bros {
 	}
 	
 	void MoveRight(){
-		motion = MOVE_R;
+		if(state == B_ST_JUMPUP || jumpState == 1)
+			;
+		else
+			motion = MOVE_R;
 		x += xi;
 		RL = RIGHT;
 		bb.x = x - B_WIDTH/2;
@@ -64,7 +68,10 @@ public class Bros {
 	}
 	
 	void MoveLeft(){
-		motion = MOVE_L;
+		if(state == B_ST_JUMPUP || jumpState == 1)
+			;
+		else
+			motion = MOVE_L;
 		x-= xi;
 		RL = LEFT;
 		bb.x = x - B_WIDTH/2;
@@ -92,7 +99,7 @@ public class Bros {
 	}
 	
 	void JumpDown(){
-		y += 10;
+		y += yi;
 		bb.x = x - B_WIDTH/2;
 		bb.y = y - B_HEIGHT/2;
 	}
@@ -108,14 +115,125 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
-		g.drawImage(SnowBrosComponent.bros_normal_l,x,y,null);
-//		g.setColor(Color.WHITE);
-//		g.fillOval(x-25, y-50, 50, 50);
-//		g.fillOval(x-25, y, 50, 50);
-//		g.setColor(Color.BLACK);
-//		g.fillOval(x-15, y-30, 10, 10);
-//		g.fillOval(x+5, y-30, 10, 10);
-//		g.setColor(Color.RED);
-//		g.fillArc(x-8, y-22, 15, 15, 0, 360);
+		if(motion == BIRTH){
+			imagecount++;
+			image = imagecount / 5;
+			if(image == SnowBrosComponent.bros_birth.length){
+				image = 0;
+				imagecount = 0;
+				motion = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_birth[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == BLAST){
+			imagecount++;
+			image = imagecount / 5;
+			if(image == SnowBrosComponent.bros_blast.length){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_blast[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == MOVE_R){
+			imagecount++;
+			image = imagecount / 4;
+			if(image >= SnowBrosComponent.bros_move_r.length){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_move_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == MOVE_L){
+			imagecount++;
+			image = imagecount / 4;
+			if(image >= SnowBrosComponent.bros_move_l.length){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_move_l[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == SMOVE_R){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_smove_r.length){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_smove_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == SMOVE_L){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_smove_l.length){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_smove_l[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == JUMP_R){
+			if(state == B_ST_ALIVE)
+				g.drawImage(SnowBrosComponent.bros_jump_r[5], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+			else
+				g.drawImage(SnowBrosComponent.bros_jump_r[(startY-y)/20], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == JUMP_L){
+			if(state == B_ST_ALIVE)
+				g.drawImage(SnowBrosComponent.bros_jump_l[5], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+			else
+				g.drawImage(SnowBrosComponent.bros_jump_l[(startY-y)/20], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == JUMPDOWN_R){
+			g.drawImage(SnowBrosComponent.bros_jump_r[5], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == JUMPDOWN_L){
+			g.drawImage(SnowBrosComponent.bros_jump_l[5], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == SHOT_R){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_shot_r.length){
+				image = 0;
+				imagecount = 0;
+				motion = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_shot_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == SHOT_L){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_shot_l.length){
+				image = 0;
+				imagecount = 0;
+				motion = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_shot_l[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == ROLL_R){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_roll_r.length){
+				image = 0;
+				imagecount = 0;
+				motion = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_roll_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else if(motion == ROLL_L){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.bros_roll_l.length){
+				image = 0;
+				imagecount = 0;
+				motion = 0;
+			}
+			g.drawImage(SnowBrosComponent.bros_roll_l[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
+		}
+		else{
+			if(RL == LEFT)
+				g.drawImage(SnowBrosComponent.bros_normal_l, x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT, null);
+			else
+				g.drawImage(SnowBrosComponent.bros_normal_r, x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT, null);
+		}
+		
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.ImageConsumer;
 import java.io.File;
 import java.io.IOException;
 
@@ -68,11 +69,22 @@ class SnowBrosComponent extends JComponent{
 	public static Image bros_roll_r[];
 	public static Image bros_roll_l[];
 	public static Image bros_next[];
+	public static Image enemy_move_r[];
+	public static Image enemy_move_l[];
+	public static Image enemy_damage[];
+	public static Image item_red;
+	public static Image item_blue;
+	public static Image item_green;
+	public static Image item_yellow;
+	public static Image missile_right;
+	public static Image missileb_right;
+	public static Image missile_left;
+	public static Image missileb_left;
 	SnowBrosComponent(){
 		bros_birth = new Image[9];
 		bros_blast = new Image[7];
-		bros_jump_r = new Image[5];
-		bros_jump_l = new Image[5];
+		bros_jump_r = new Image[6];
+		bros_jump_l = new Image[6];
 		bros_move_r = new Image[3];
 		bros_move_l = new Image[3];
 		bros_smove_r = new Image[3];
@@ -82,20 +94,26 @@ class SnowBrosComponent extends JComponent{
 		bros_roll_r = new Image[3];
 		bros_roll_l = new Image[3];
 		bros_next = new Image[2];
+		enemy_move_r = new Image[2];
+		enemy_move_l = new Image[2];
+		enemy_damage = new Image[4];
 		try {
 			background_title = ImageIO.read(new File("Image/background_title.jpg"));
 			background_stage = ImageIO.read(new File("Image/background_stage.jpg"));
 			background_ending = ImageIO.read(new File("Image/background_ending.png"));
 			bros_normal_r = ImageIO.read(new File("Image/Bros/bros_r.png"));
-			bros_normal_r = ImageIO.read(new File("Image/Bros/bros_l.png"));
+			bros_normal_l = ImageIO.read(new File("Image/Bros/bros_l.png"));
+			
 			for(int i = 0; i < 9; i++){
-//				bros_birth[i] = ImageIO.read(new File("Image/Bros/BIRTH/bros_brith"+(i+1)+".png"));
+				bros_birth[i] = ImageIO.read(new File("Image/Bros/BIRTH/bros_birth"+(i+1)+".png"));
 				if(i < 7)
 					bros_blast[i] = ImageIO.read(new File("Image/Bros/BLAST/bros_blast"+(i+1)+".png"));
-				if(i < 5){
+				if(i < 6){
 					bros_jump_r[i] = ImageIO.read(new File("Image/Bros/JUMP_R/bros_jump_r"+(i+1)+".png"));
-				//	bros_jump_l[i] = ImageIO.read(new File("Image/Bros/JUMP_R/bros_jump_l"+(i+1)+".png"));
+					bros_jump_l[i] = ImageIO.read(new File("Image/Bros/JUMP_L/bros_jump_l"+(i+1)+".png"));
 				}
+				if(i < 4)
+					enemy_damage[i] = ImageIO.read(new File("Image/Enemy/DAMAGE/enemy_damage"+(i+1)+".png"));
 				if(i < 3){
 					bros_move_r[i] = ImageIO.read(new File("Image/Bros/MOVE_R/bros_move_r"+(i+1)+".png"));
 					bros_move_l[i] = ImageIO.read(new File("Image/Bros/MOVE_l/bros_move_l"+(i+1)+".png"));
@@ -103,12 +121,23 @@ class SnowBrosComponent extends JComponent{
 					bros_smove_l[i] = ImageIO.read(new File("Image/Bros/SMOVE_L/bros_smove_l"+(i+1)+".png"));
 					bros_shot_r[i] = ImageIO.read(new File("Image/Bros/SHOT_R/bros_shot_r"+(i+1)+".png"));
 					bros_shot_l[i] = ImageIO.read(new File("Image/Bros/SHOT_L/bros_shot_l"+(i+1)+".png"));
-				//	bros_roll_r[i] = ImageIO.read(new File("Image/Bros/ROLL_L/bros_roll_r"+(i+1)+".png"));
+					bros_roll_r[i] = ImageIO.read(new File("Image/Bros/ROLL_R/bros_roll_r"+(i+1)+".png"));
 					bros_roll_l[i] = ImageIO.read(new File("Image/Bros/ROLL_L/bros_roll_l"+(i+1)+".png"));
 				}
-				if(i < 2)
+				if(i < 2){
 					bros_next[i] = ImageIO.read(new File("Image/Bros/NEXT/bros_next"+(i+1)+".png"));
+					enemy_move_r[i] = ImageIO.read(new File("Image/Enemy/MOVE_R/enemy_move_r"+(i+1)+".png"));
+					enemy_move_l[i] = ImageIO.read(new File("Image/Enemy/MOVE_L/enemy_move_l"+(i+1)+".png"));
+				}
 			}
+			item_red = ImageIO.read(new File("Image/Item/item3.png"));
+			item_blue = ImageIO.read(new File("Image/Item/item4.png"));
+			item_green = ImageIO.read(new File("Image/Item/item2.png"));
+			item_yellow = ImageIO.read(new File("Image/Item/item1.png"));
+			missile_right = ImageIO.read(new File("Image/Missile/missile_r1.png"));
+			missileb_right = ImageIO.read(new File("Image/Missile/missile_r2.png"));
+			missile_left = ImageIO.read(new File("Image/Missile/missile_l1.png"));
+			missileb_left = ImageIO.read(new File("Image/Missile/missile_l2.png"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -153,9 +182,9 @@ class SnowBrosComponent extends JComponent{
 					map[STAGE1][i][j] = 1;
 				else
 					map[STAGE1][i][j] = 0;
-				if((i < 10 || i > X - 20) && j < Y - 100)
+				if((i < 20 || i > X - 30) && j < Y - 100)
 					map[STAGE1][i][j] = 2;
-				else if((i < 10 || i > X - 20) && j >= Y - 100)
+				else if((i < 20 || i > X - 30) && j >= Y - 100)
 					map[STAGE1][i][j] = 3;
 				if(j < Y && j >= Y - 10)
 					map[STAGE1][i][j] = 1;
@@ -169,14 +198,28 @@ class SnowBrosComponent extends JComponent{
 	class TimerHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(bros.state == Bros.B_ST_JUMPUP)
+			
+			if(bros.state == Bros.B_ST_JUMPUP){
 				bros.JumpUp();
+				if(bros.RL == Bros.RIGHT)
+					bros.motion = Bros.JUMP_R;
+				else if(bros.RL == Bros.LEFT)
+					bros.motion = Bros.JUMP_L;
+			}
 			else if(bros.state == Bros.B_ST_ALIVE){
 				if(map[STAGE1][bros.x][bros.y+50] == 1){
+					if(bros.jumpState == 1)
+						bros.motion = 0;
 					bros.jumpState = 0;
 				}
-				else
+				else{
+					bros.jumpState = 1;
 					bros.JumpDown();
+					if(bros.RL == Bros.RIGHT)
+						bros.motion = Bros.JUMPDOWN_R;
+					else if(bros.RL == Bros.LEFT)
+						bros.motion = Bros.JUMPDOWN_L;
+				}
 			}
 			for(int i = 0; i < MAX_MISSILE; i++){
 				if(myShot[i].state == Missile.M_ST_ALIVE){
@@ -234,8 +277,9 @@ class SnowBrosComponent extends JComponent{
 							enemy[i].Bounce();
 							rolldir[i] = SHOT_LEFT;
 						}
-						else if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 3)
+						else if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 3){
 							enemy[i].blast();
+						}
 					}
 					else if(rolldir[i] == SHOT_LEFT){
 						if(map[STAGE1][enemy[i].x-25][enemy[i].y] == 2){
@@ -246,11 +290,19 @@ class SnowBrosComponent extends JComponent{
 							enemy[i].blast();
 					}
 					if(map[STAGE1][enemy[i].x][enemy[i].y+50] == 0){
+						System.out.println(enemy[i].x);
+						System.out.println(enemy[i].y);
 						enemy[i].Down();
 					}
 					for(int j = 0; j < MAX_ENEMY; j++){
 						if(j != i && enemy[i].getBBox().intersects(enemy[j].getBBox())){
-							enemy[j].blast();
+							if(enemy[j].state == Enemy.E_ST_BALL){
+								enemy[i].Bounce();
+								enemy[j].Bounce();
+								System.out.println("z");
+							}
+							else
+								enemy[j].blast();
 						}
 					}
 				}
@@ -296,7 +348,6 @@ class SnowBrosComponent extends JComponent{
 						for(int j = 0; j < MAX_ENEMY; j++){
 							enemy[j].da = 2;
 						}
-						
 					}
 				}
 				if(myItem[i].state==Item.DISTANCE){ //장거리 공격
@@ -335,7 +386,6 @@ class SnowBrosComponent extends JComponent{
 			}
 			//카운터
 			count = (count + 1)%20;
-			
 			repaint();
 		}
 	}
@@ -349,13 +399,20 @@ class SnowBrosComponent extends JComponent{
 					STATE = STAGE1;
 					score = 0;
 					life = 3;
+					bros.StartBros();
 				}
 			}
 			else if(STATE == STAGE1){ //STATE1일때
-				if(code == KeyEvent.VK_RIGHT)
+				if(code == KeyEvent.VK_RIGHT){
+					if(bros.motion == Bros.MOVE_R)
+						bros.motion = 0;
 					brosright = 0;
-				else if (code == KeyEvent.VK_LEFT)
+				}
+				else if (code == KeyEvent.VK_LEFT){
+					if(bros.motion == Bros.MOVE_L)
+						bros.motion = 0;
 					brosleft = 0;
+				}
 				else if (code == KeyEvent.VK_DOWN)
 					brosdown = 0;
 			}
@@ -392,10 +449,16 @@ class SnowBrosComponent extends JComponent{
 							enemy[j].state = Enemy.E_ST_ROLL;
 							ball[j] = false;
 							rolldir[j] = bros.RL;
-							if(rolldir[j] == SHOT_RIGHT)
-								enemy[j].dx = 10;
-							else if(rolldir[j] == SHOT_LEFT)
-								enemy[j].dx = -10;
+							if(rolldir[j] == SHOT_RIGHT){
+								enemy[j].dx = 20;
+								bros.motion = Bros.ROLL_R;
+								bros.imagecount = 0;
+							}
+							else if(rolldir[j] == SHOT_LEFT){
+								enemy[j].dx = -20;
+								bros.motion = Bros.ROLL_L;
+								bros.imagecount = 0;
+							}
 							break;
 						}
 					}
@@ -405,10 +468,16 @@ class SnowBrosComponent extends JComponent{
 								if(shotDelay == 0){
 									if(myShot[i].state == Missile.M_ST_DEATH){
 										myShot[i].Shot(bros.getX(), bros.getY());
-										if(bros.RL == Bros.RIGHT)
+										if(bros.RL == Bros.RIGHT){
 											myShotd[i] = SHOT_RIGHT;
-										else if(bros.RL == Bros.LEFT)
+											bros.motion = Bros.SHOT_R;
+											bros.imagecount = 0;
+										}
+										else if(bros.RL == Bros.LEFT){
 											myShotd[i] = SHOT_LEFT;
+											bros.motion = Bros.SHOT_L;
+											bros.imagecount = 0;
+										}
 										shotDelay = 10;
 										break;
 									}
@@ -430,20 +499,12 @@ class SnowBrosComponent extends JComponent{
 			int ty = Y/2 - 50;
 			int i;
 			
-			Font font = new Font(Font.SANS_SERIF,Font.BOLD,100);
+			Font font = new Font(Font.SANS_SERIF,Font.BOLD,36);
 			g.setFont(font);
-			g.setColor(Color.white);
-			for(i=-5; i<=5; i++){
-				g.drawString("SnowBros",tx-i, ty-i);
-			}
-			g.setColor(Color.red);
-			g.drawString("SnowBros", tx, ty);
 			
 			if(count<10){
-				font = new Font(Font.SANS_SERIF, Font.BOLD, 36);
-				g.setFont(font);
 				g.setColor(Color.WHITE);
-				g.drawString("PRESS SPACE KEY", X/2-150, Y/4*3);
+				g.drawString("PRESS SPACE KEY", X/2-150, Y/8*7);
 			}
 		}
 		else if (STATE == STAGE1){
@@ -472,7 +533,7 @@ class SnowBrosComponent extends JComponent{
 			g.drawString(" LIFE: " + life, 20, 60);
 		}
 		else if(STATE == ENDING){
-			g.drawImage(background_ending, X, Y, null);
+			g.drawImage(background_ending, 0, 0, X, Y, null);
 			Font font = new Font(Font.SANS_SERIF, Font.BOLD, 36);
 			g.setFont(font);
 			g.setColor(Color.WHITE);

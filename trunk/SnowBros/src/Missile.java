@@ -5,11 +5,14 @@ public class Missile {
 	public static int M_ST_ALIVE = 1;
 	public static int M_WIDTH = 20;
 	public static int M_HEIGHT = 30;
+	public static int RIGHT = 1;
+	public static int LEFT = -1;
 	
 	public int state;
 	private int x, y, z;
-	private int dx;
+	private int dx, motion;
 	int di; //이동거리
+	
 	
 	private Rectangle bb;
 	
@@ -37,6 +40,7 @@ public class Missile {
 	
 	void MoveR() {
 		if(state == M_ST_ALIVE){
+			motion = RIGHT;
 			z += 5;
 			x += dx;
 			bb.x = x - M_WIDTH/2;
@@ -52,6 +56,7 @@ public class Missile {
 	
 	void MoveL() {
 		if(state == M_ST_ALIVE){
+			motion = LEFT;
 			z += 5;
 			x -= dx;
 			bb.x = x - M_WIDTH/2;
@@ -72,7 +77,11 @@ public class Missile {
 	
 	void Draw(Graphics g){
 		if(state == M_ST_ALIVE){
-			g.fillOval(x, y, M_WIDTH, M_HEIGHT);
+			if(motion == RIGHT)
+				g.drawImage(SnowBrosComponent.missile_right, x, y, M_WIDTH, M_HEIGHT, null);
+			else if(motion ==LEFT)
+				g.drawImage(SnowBrosComponent.missile_left, x, y, M_WIDTH, M_HEIGHT, null);
+				
 		}
 	}
 }

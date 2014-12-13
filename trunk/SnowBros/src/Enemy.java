@@ -10,9 +10,12 @@ public class Enemy {
 	public static int E_ST_BLAST = 5;
 	public static int E_WIDTH = 50;
 	public static int E_HEIGHT = 100;
+	public static int RIGHT = 1;
+	public static int LEFT = -1;
 	
 	public int state, damage;
-	public int x, y, dx, dy, tx;
+	public int image, imagecount;
+	public int x, y, dx, dy, tx, RL;
 	private Rectangle bb;
 	int da; //damage ¡ı∞°
 	
@@ -41,10 +44,20 @@ public class Enemy {
 	
 	void birth(int layer){
 		state = E_ST_ALIVE;
-		x = SnowBros.FRAME_W/3;
-		dx = 5;
+		if(layer/2 == 1){
+			x = 100;
+			dx = 5;
+			tx = SnowBros.FRAME_W - 50;
+			RL = LEFT;
+		}
+		else{
+			x = SnowBros.FRAME_W-100;
+			dx = -5;
+			tx = 50;
+			RL = LEFT;
+		}
 		dy = 10;
-		tx = SnowBros.FRAME_W - 50;
+		
 		y = SnowBros.FRAME_H - 55 - (layer * 100);
 		bb.x = (int) (x - E_WIDTH/2);
 		bb.y = (int) (y - E_HEIGHT/2);
@@ -61,10 +74,12 @@ public class Enemy {
 			x += dx;
 			if(Math.abs(tx-x) < 100){
 				if(tx > SnowBros.FRAME_W/2){
+					RL = LEFT;
 					tx = 50;
 					dx = -5;
 				}
 				else{
+					RL = RIGHT;
 					tx = SnowBros.FRAME_W-50;
 					dx = 5;
 				}
@@ -106,23 +121,23 @@ public class Enemy {
 	
 	void Draw(Graphics g){
 		if(state == E_ST_ALIVE){
-			g.setColor(Color.RED);
-			g.fillOval(x-25, y-50, 50, 50);
-			g.fillOval(x-25, y, 50, 50);
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= SnowBrosComponent.enemy_move_r.length){
+				image = 0;
+				imagecount = 0;
+			}
+			if(RL == RIGHT)
+				g.drawImage(SnowBrosComponent.enemy_move_r[image], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
+			else if(RL == LEFT){
+				g.drawImage(SnowBrosComponent.enemy_move_l[image], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
+			}
 		}
 		else if(state == E_ST_DAMAGE){
-			g.setColor(Color.RED);
-			g.fillOval(x-25, y-50, 50, 50);
-			g.fillOval(x-25, y, 50, 50);
-			g.setColor(Color.WHITE);
-			g.fillRect(x-25, y+25-(25*(damage-1)), 50, 25+(25*(damage-1)));
+			g.drawImage(SnowBrosComponent.enemy_damage[damage-1], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
 		}
 		else if(state == E_ST_BALL || state == E_ST_ROLL){
-			g.setColor(Color.RED);
-			g.fillOval(x-25, y-50, 50, 50);
-			g.fillOval(x-25, y, 50, 50);
-			g.setColor(Color.WHITE);
-			g.fillRect(x-25, y+25-(25*(damage-1)), 50, 25+(25*(damage-1)));
+			g.drawImage(SnowBrosComponent.enemy_damage[3], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
 		}
 	}
 }
