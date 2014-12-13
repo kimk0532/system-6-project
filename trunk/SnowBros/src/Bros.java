@@ -83,29 +83,9 @@ public class Bros {
 	}
 	
 	void Draw(Graphics g){
-		if(startY-y == 30 || startY-y == 70){
-			if(state == B_ST_JUMPUP){
-				g.setColor(Color.WHITE);
-				g.fillOval(x-50, y-25, 50, 50);
-				g.fillOval(x, y-25, 50, 50);
-				g.setColor(Color.BLACK);
-				g.fillOval(x-40, y-10, 10, 10);
-				g.fillOval(x-40, y+10, 10, 10);
-				g.setColor(Color.RED);
-				g.fillArc(x-8, y-12, 15, 15, 0, 360);
-			}
-			else{
-				g.setColor(Color.WHITE);
-				g.fillOval(x-25, y-50, 50, 50);
-				g.fillOval(x-25, y, 50, 50);
-				g.setColor(Color.BLACK);
-				g.fillOval(x-15, y-30, 10, 10);
-				g.fillOval(x+5, y-30, 10, 10);
-				g.setColor(Color.RED);
-				g.fillArc(x-8, y-22, 15, 15, 0, 360);
-			}
-		}
-		else{
+		if(SnowBrosComponent.STATE == SnowBrosComponent.STAGE1 || 
+				SnowBrosComponent.STATE == SnowBrosComponent.STAGE2 || 
+				SnowBrosComponent.STATE == SnowBrosComponent.STAGE3){
 			g.setColor(Color.WHITE);
 			g.fillOval(x-25, y-50, 50, 50);
 			g.fillOval(x-25, y, 50, 50);
