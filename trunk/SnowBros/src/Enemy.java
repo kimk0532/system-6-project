@@ -136,8 +136,17 @@ public class Enemy {
 		else if(state == E_ST_DAMAGE){
 			g.drawImage(SnowBrosComponent.enemy_damage[damage-1], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
 		}
-		else if(state == E_ST_BALL || state == E_ST_ROLL){
+		else if(state == E_ST_BALL) {
 			g.drawImage(SnowBrosComponent.enemy_damage[3], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
+		}
+		else if(state == E_ST_ROLL){
+			imagecount++;
+			image = imagecount / 3;
+			if(image >= 3){
+				image = 0;
+				imagecount = 0;
+			}
+			g.drawImage(SnowBrosComponent.enemy_damage[image+3], x - E_WIDTH/2, y - E_HEIGHT/2, E_WIDTH, E_HEIGHT, null);
 		}
 	}
 }
