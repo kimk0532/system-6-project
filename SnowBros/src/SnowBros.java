@@ -15,8 +15,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-
-
 class SnowBrosComponent extends JComponent{
 	public static int MAX_ENEMY = 5;
 	public static int MAX_ITEM = 5;
@@ -96,7 +94,7 @@ class SnowBrosComponent extends JComponent{
 		bros_next = new Image[2];
 		enemy_move_r = new Image[2];
 		enemy_move_l = new Image[2];
-		enemy_damage = new Image[4];
+		enemy_damage = new Image[6];
 		try {
 			background_title = ImageIO.read(new File("Image/background_title.jpg"));
 			background_stage = ImageIO.read(new File("Image/background_stage.jpg"));
@@ -111,9 +109,8 @@ class SnowBrosComponent extends JComponent{
 				if(i < 6){
 					bros_jump_r[i] = ImageIO.read(new File("Image/Bros/JUMP_R/bros_jump_r"+(i+1)+".png"));
 					bros_jump_l[i] = ImageIO.read(new File("Image/Bros/JUMP_L/bros_jump_l"+(i+1)+".png"));
-				}
-				if(i < 4)
 					enemy_damage[i] = ImageIO.read(new File("Image/Enemy/DAMAGE/enemy_damage"+(i+1)+".png"));
+				}
 				if(i < 3){
 					bros_move_r[i] = ImageIO.read(new File("Image/Bros/MOVE_R/bros_move_r"+(i+1)+".png"));
 					bros_move_l[i] = ImageIO.read(new File("Image/Bros/MOVE_l/bros_move_l"+(i+1)+".png"));
@@ -290,16 +287,19 @@ class SnowBrosComponent extends JComponent{
 							enemy[i].blast();
 					}
 					if(map[STAGE1][enemy[i].x][enemy[i].y+50] == 0){
-						System.out.println(enemy[i].x);
-						System.out.println(enemy[i].y);
 						enemy[i].Down();
 					}
 					for(int j = 0; j < MAX_ENEMY; j++){
 						if(j != i && enemy[i].getBBox().intersects(enemy[j].getBBox())){
 							if(enemy[j].state == Enemy.E_ST_BALL){
 								enemy[i].Bounce();
-								enemy[j].Bounce();
-								System.out.println("z");
+								rolldir[i] *= -1;
+								enemy[j].state = Enemy.E_ST_ROLL;
+								ball[j] = false;
+								rolldir[j] = rolldir[i] * -1;
+								enemy[j].dx = enemy[i].dx * -1;
+								bros.motion = Bros.ROLL_R;
+								bros.imagecount = 0;
 							}
 							else
 								enemy[j].blast();
