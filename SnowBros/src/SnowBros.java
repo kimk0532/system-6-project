@@ -50,17 +50,65 @@ class SnowBrosComponent extends JComponent{
 	private int score; //점수
 	private int life; //라이프
 	private int count; //애니메이션 카운터
-	private Image background;
-	private Image bros_normal;
-	private Image bros_jump[];
-	private Image bros_mover[];
-	private Image bros_movel[];
-	private Image bros_shot[];
+	private Image background_title;
+	private Image background_stage;
+	private Image background_ending;
+	public static Image bros_normal_r;
+	public static Image bros_normal_l;
+	public static Image bros_birth[];
+	public static Image bros_blast[];
+	public static Image bros_jump_r[];
+	public static Image bros_jump_l[];
+	public static Image bros_move_r[];
+	public static Image bros_move_l[];
+	public static Image bros_smove_r[];
+	public static Image bros_smove_l[];
+	public static Image bros_shot_r[];
+	public static Image bros_shot_l[];
+	public static Image bros_roll_r[];
+	public static Image bros_roll_l[];
+	public static Image bros_next[];
 	SnowBrosComponent(){
-		
-		
+		bros_birth = new Image[9];
+		bros_blast = new Image[7];
+		bros_jump_r = new Image[5];
+		bros_jump_l = new Image[5];
+		bros_move_r = new Image[3];
+		bros_move_l = new Image[3];
+		bros_smove_r = new Image[3];
+		bros_smove_l = new Image[3];
+		bros_shot_r = new Image[3];
+		bros_shot_l = new Image[3];
+		bros_roll_r = new Image[3];
+		bros_roll_l = new Image[3];
+		bros_next = new Image[2];
 		try {
-			background = ImageIO.read(new File("Image/background.jpg"));
+			background_title = ImageIO.read(new File("Image/background_title.jpg"));
+			background_stage = ImageIO.read(new File("Image/background_stage.jpg"));
+			background_ending = ImageIO.read(new File("Image/background_ending.png"));
+			bros_normal_r = ImageIO.read(new File("Image/Bros/bros_r.png"));
+			bros_normal_r = ImageIO.read(new File("Image/Bros/bros_l.png"));
+			for(int i = 0; i < 9; i++){
+//				bros_birth[i] = ImageIO.read(new File("Image/Bros/BIRTH/bros_brith"+(i+1)+".png"));
+				if(i < 7)
+					bros_blast[i] = ImageIO.read(new File("Image/Bros/BLAST/bros_blast"+(i+1)+".png"));
+				if(i < 5){
+					bros_jump_r[i] = ImageIO.read(new File("Image/Bros/JUMP_R/bros_jump_r"+(i+1)+".png"));
+				//	bros_jump_l[i] = ImageIO.read(new File("Image/Bros/JUMP_R/bros_jump_l"+(i+1)+".png"));
+				}
+				if(i < 3){
+					bros_move_r[i] = ImageIO.read(new File("Image/Bros/MOVE_R/bros_move_r"+(i+1)+".png"));
+					bros_move_l[i] = ImageIO.read(new File("Image/Bros/MOVE_l/bros_move_l"+(i+1)+".png"));
+					bros_smove_r[i] = ImageIO.read(new File("Image/Bros/SMOVE_R/bros_smove_r"+(i+1)+".png"));
+					bros_smove_l[i] = ImageIO.read(new File("Image/Bros/SMOVE_L/bros_smove_l"+(i+1)+".png"));
+					bros_shot_r[i] = ImageIO.read(new File("Image/Bros/SHOT_R/bros_shot_r"+(i+1)+".png"));
+					bros_shot_l[i] = ImageIO.read(new File("Image/Bros/SHOT_L/bros_shot_l"+(i+1)+".png"));
+				//	bros_roll_r[i] = ImageIO.read(new File("Image/Bros/ROLL_L/bros_roll_r"+(i+1)+".png"));
+					bros_roll_l[i] = ImageIO.read(new File("Image/Bros/ROLL_L/bros_roll_l"+(i+1)+".png"));
+				}
+				if(i < 2)
+					bros_next[i] = ImageIO.read(new File("Image/Bros/NEXT/bros_next"+(i+1)+".png"));
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -74,7 +122,7 @@ class SnowBrosComponent extends JComponent{
 		ball = new boolean[MAX_ENEMY];
 		rolldir = new int[MAX_ENEMY];
 		for(int i = 0; i < MAX_ENEMY; i++){
-			enemy[i] = new Enemy();     
+			enemy[i] = new Enemy();
 			ball[i] = false;
 			rolldir[i] = 0;
 		}
@@ -375,12 +423,9 @@ class SnowBrosComponent extends JComponent{
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-			g.drawImage(background, 0, 0, X, Y, null);
-		
-//		g.setColor(Color.BLACK);
-//		g.fillRect(0, 0, X, Y);
 		//상태별 문자 출력
 		if(STATE == TITLE){
+			g.drawImage(background_title, 0, 0, X, Y, null);
 			int tx = X/2 - 300;
 			int ty = Y/2 - 50;
 			int i;
@@ -402,6 +447,7 @@ class SnowBrosComponent extends JComponent{
 			}
 		}
 		else if (STATE == STAGE1){
+			g.drawImage(background_stage, 0, 0, X, Y, null);
 			g.setColor(Color.YELLOW);
 			for(int i = 0; i < X; i++){
 				for(int j = 0; j < Y; j++){
@@ -426,6 +472,7 @@ class SnowBrosComponent extends JComponent{
 			g.drawString(" LIFE: " + life, 20, 60);
 		}
 		else if(STATE == ENDING){
+			g.drawImage(background_ending, X, Y, null);
 			Font font = new Font(Font.SANS_SERIF, Font.BOLD, 36);
 			g.setFont(font);
 			g.setColor(Color.WHITE);
