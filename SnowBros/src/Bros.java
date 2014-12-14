@@ -25,13 +25,16 @@ public class Bros {
 	
 	public static int RIGHT = 1;
 	public static int LEFT = -1;
-	public int x, y,state, RL, jumpState, motion, imagecount, image;
+	public int x, y,state, RL, jumpState, motion, imagecount, image, fast, blast;
 	private int startY;
 	private Rectangle bb;
 	int xi,yi; //speed ¾ÆÀÌÅÛ
 	
 	Bros(){
 		motion = 0;
+		fast = 0;
+		blast = 0;
+		SnowBrosComponent.big = 0;
 		state = B_ST_DEATH;
 		x = 0;
 		y = 0;
@@ -50,6 +53,9 @@ public class Bros {
 	
 	void StartBros(){
 		motion = BIRTH;
+		blast = 0;
+		SnowBrosComponent.big = 0;
+		
 		state = B_ST_ALIVE;
 		x = SnowBros.FRAME_W / 2;
 		y = SnowBros.FRAME_H - 55;
@@ -105,9 +111,12 @@ public class Bros {
 	}
 	
 	void Blast(){
+		bb.x = 0;
+		bb.y = 0;
+		blast = 1;
+		fast = 0;
 		motion = BLAST;
 		state = B_ST_BLAST;
-		StartBros();
 	}
 	
 	void Item(){
@@ -127,14 +136,18 @@ public class Bros {
 		}
 		else if(motion == BLAST){
 			imagecount++;
-			image = imagecount / 5;
+			image = imagecount / 4;
+			blast = 1;
+			
+			 
 			if(image == SnowBrosComponent.bros_blast.length){
 				image = 0;
 				imagecount = 0;
+				StartBros();
 			}
 			g.drawImage(SnowBrosComponent.bros_blast[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
 		}
-		else if(motion == MOVE_R){
+		else if(motion == MOVE_R && fast == 0){
 			imagecount++;
 			image = imagecount / 4;
 			if(image >= SnowBrosComponent.bros_move_r.length){
@@ -143,7 +156,7 @@ public class Bros {
 			}
 			g.drawImage(SnowBrosComponent.bros_move_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
 		}
-		else if(motion == MOVE_L){
+		else if(motion == MOVE_L && fast == 0){
 			imagecount++;
 			image = imagecount / 4;
 			if(image >= SnowBrosComponent.bros_move_l.length){
@@ -152,7 +165,7 @@ public class Bros {
 			}
 			g.drawImage(SnowBrosComponent.bros_move_l[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
 		}
-		else if(motion == SMOVE_R){
+		else if(motion == MOVE_R && fast == 1){
 			imagecount++;
 			image = imagecount / 3;
 			if(image >= SnowBrosComponent.bros_smove_r.length){
@@ -161,7 +174,7 @@ public class Bros {
 			}
 			g.drawImage(SnowBrosComponent.bros_smove_r[image], x - B_WIDTH/2, y - B_HEIGHT/2, B_WIDTH, B_HEIGHT,null);
 		}
-		else if(motion == SMOVE_L){
+		else if(motion == MOVE_L && fast == 1){
 			imagecount++;
 			image = imagecount / 3;
 			if(image >= SnowBrosComponent.bros_smove_l.length){

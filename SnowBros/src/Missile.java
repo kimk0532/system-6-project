@@ -10,7 +10,7 @@ public class Missile {
 	
 	public int state;
 	private int x, y, z;
-	private int dx, motion;
+	private int dx, motion ;
 	int di; //이동거리
 	
 	
@@ -77,11 +77,14 @@ public class Missile {
 	
 	void Draw(Graphics g){
 		if(state == M_ST_ALIVE){
-			if(motion == RIGHT)
+			if(motion == RIGHT && SnowBrosComponent.big == 0)
 				g.drawImage(SnowBrosComponent.missile_right, x, y, M_WIDTH, M_HEIGHT, null);
-			else if(motion ==LEFT)
+			else if(motion ==LEFT && SnowBrosComponent.big == 0)
 				g.drawImage(SnowBrosComponent.missile_left, x, y, M_WIDTH, M_HEIGHT, null);
-				
+			else if(motion == RIGHT && SnowBrosComponent.big == 1)
+				g.drawImage(SnowBrosComponent.missileb_right, x, y, M_WIDTH, M_HEIGHT, null);
+			else if(motion == LEFT && SnowBrosComponent.big == 1)
+				g.drawImage(SnowBrosComponent.missileb_left, x, y, M_WIDTH, M_HEIGHT, null);
 		}
 	}
 }
