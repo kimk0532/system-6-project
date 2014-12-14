@@ -1,6 +1,10 @@
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Item {
 	public static int I_ST_DEATH = 0;
@@ -14,6 +18,7 @@ public class Item {
 	
 	public int state;
 	private int x, y;
+	private String p;
 	
 	private Rectangle bb;
 	
@@ -67,6 +72,18 @@ public class Item {
 		else if(Util.prob100(15)){
 			y = 640;
 		}
+		if(Util.prob100(15))
+			p = "item5.png";
+		else if(Util.prob100(15))
+			p = "item6.png";
+		else if(Util.prob100(15))
+			p = "item7.png";
+		else if(Util.prob100(15))
+			p = "item8.png";
+		else if(Util.prob100(15))
+			p = "item9.png";
+		else
+			p = "item10.png";
 		
 		x = Util.rand(40,SnowBros.FRAME_W-40);
 		bb.x = x - I_WIDTH/2;
@@ -91,7 +108,13 @@ public class Item {
 		if(state == DISTANCE){
 			g.drawImage(SnowBrosComponent.item_yellow, x, y, I_WIDTH, I_HEIGHT, null);
 		}
+		Image score;
 		if(state == SCORE){
+			try {
+				score = ImageIO.read(new File(p));
+				} catch (IOException e) { 
+					
+				}
 			g.drawImage(SnowBrosComponent.item_green, x, y, I_WIDTH, I_HEIGHT, null);
 		}
 	}

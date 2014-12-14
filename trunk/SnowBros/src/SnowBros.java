@@ -45,7 +45,8 @@ class SnowBrosComponent extends JComponent{
 	private boolean ball[];
 	private int noshot, k;
 	private int rolldir[];
-	
+	private int enemystate;
+	public static int big;
 	private int score; //점수
 	private int life; //라이프
 	private int count; //애니메이션 카운터
@@ -79,6 +80,8 @@ class SnowBrosComponent extends JComponent{
 	public static Image missile_left;
 	public static Image missileb_left;
 	SnowBrosComponent(){
+		enemystate = 0;
+		big = 0;
 		bros_birth = new Image[9];
 		bros_blast = new Image[7];
 		bros_jump_r = new Image[6];
@@ -187,6 +190,66 @@ class SnowBrosComponent extends JComponent{
 					map[STAGE1][i][j] = 1;
 			}
 		}
+		//STAGE2
+		for(int i = 0; i < X; i++){
+			for(int j = 0; j < Y; j++){
+				if(j >= 590 && j < 600 && i > X -300)
+					map[STAGE2][i][j] = 1;
+				else if(j >= 590 && j < 600 && i < 300)
+					map[STAGE2][i][j] = 1;
+				else if(j >= 490 && j < 500 && i > 100 && i < X - 100)
+					map[STAGE2][i][j] = 1;
+				else if(j >= 390 && j < 400 && i > X - 300)
+					map[STAGE2][i][j] = 1;
+				else if(j >= 390 && j < 400 && i < 300)
+					map[STAGE2][i][j] = 1;
+				else if(j >= 290 && j < 300 && i > 100 && i < X - 100)
+					map[STAGE2][i][j] = 1;
+				else
+					map[STAGE2][i][j] = 0;
+				if((i < 20 || i > X - 20) && j < Y - 100) //20으로수정
+				map[STAGE2][i][j] = 2;
+				else if((i < 20 || i > X - 20) && j >= Y - 100) //20으로수정
+					map[STAGE2][i][j] = 3;
+				if(j < Y && j >= Y - 10)
+					map[STAGE2][i][j] = 1;
+			}
+		}
+		//STAGE3
+		for(int i = 0; i < X; i++){
+			for(int j = 0; j < Y; j++){
+				if(j >= 590 && j < 600 && i > 250 && i < X - 130)
+					map[STAGE3][i][j] = 1;
+				else if(j >= 490 && j < 500 && i > 130 && i < X - 250)
+					map[STAGE3][i][j] = 1;
+				else if(j >= 390 && j < 400 && i > 250 && i < X - 130)
+					map[STAGE3][i][j] = 1;
+				else if(j >= 290 && j < 300 && i > 130 && i < X - 250)
+					map[STAGE3][i][j] = 1;
+				else if(j >= 190 && j < 200 && i > 250 && i < X - 130)
+					map[STAGE3][i][j] = 1;
+				/////////
+				else if(i < X - 130 && i > X - 153 && j < 190 && j >= 100) //속도아이템먹으면 20씩증가하므로 언덕 X좌표 20이상?
+					map[STAGE3][i][j] = 2;
+				else if(i > 130 && i < 153 && j < 290 && j >= 200)
+					map[STAGE3][i][j] = 2;
+				else if(i < X - 130 && i > X - 153 && j < 390 && j >= 300)
+					map[STAGE3][i][j] = 2;
+				else if(i > 130 && i < 153 && j < 490 && j > 400)
+					map[STAGE3][i][j] = 2;
+				else if(i < X - 130 && i > X - 153 && j < 590 && j >= 500)
+					map[STAGE3][i][j] = 2;
+				/////////
+				else
+					map[STAGE3][i][j] = 0;
+				if((i < 20 || i > X - 20) && j < Y - 100)
+					map[STAGE3][i][j] = 2;
+				else if((i < 20 || i > X - 20) && j >= Y - 100)
+					map[STAGE3][i][j] = 3;
+				if(j < Y && j >= Y - 10)
+					map[STAGE3][i][j] = 1;
+			}
+		}
 		STATE = TITLE;
 		count = 0;
 		
@@ -195,7 +258,6 @@ class SnowBrosComponent extends JComponent{
 	class TimerHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			if(bros.state == Bros.B_ST_JUMPUP){
 				bros.JumpUp();
 				if(bros.RL == Bros.RIGHT)
@@ -204,18 +266,50 @@ class SnowBrosComponent extends JComponent{
 					bros.motion = Bros.JUMP_L;
 			}
 			else if(bros.state == Bros.B_ST_ALIVE){
-				if(map[STAGE1][bros.x][bros.y+50] == 1){
-					if(bros.jumpState == 1)
-						bros.motion = 0;
-					bros.jumpState = 0;
+				if(STATE == STAGE1){
+					if(map[STAGE1][bros.x][bros.y+50] == 1){
+						if(bros.jumpState == 1)
+							bros.motion = 0;
+						bros.jumpState = 0;
+					}
+					else{
+						bros.jumpState = 1;
+						bros.JumpDown();
+						if(bros.RL == Bros.RIGHT)
+							bros.motion = Bros.JUMPDOWN_R;
+						else if(bros.RL == Bros.LEFT)
+							bros.motion = Bros.JUMPDOWN_L;
+					}
 				}
-				else{
-					bros.jumpState = 1;
-					bros.JumpDown();
-					if(bros.RL == Bros.RIGHT)
-						bros.motion = Bros.JUMPDOWN_R;
-					else if(bros.RL == Bros.LEFT)
-						bros.motion = Bros.JUMPDOWN_L;
+				if(STATE == STAGE2){
+					if(map[STAGE2][bros.x][bros.y+50] == 1){
+						if(bros.jumpState == 1)
+							bros.motion = 0;
+						bros.jumpState = 0;
+					}
+					else{
+						bros.jumpState = 1;
+						bros.JumpDown();
+						if(bros.RL == Bros.RIGHT)
+							bros.motion = Bros.JUMPDOWN_R;
+						else if(bros.RL == Bros.LEFT)
+							bros.motion = Bros.JUMPDOWN_L;
+					}
+				}
+				if(STATE == STAGE3){
+					if(map[STAGE3][bros.x][bros.y+50] == 1 || map[STAGE3][bros.x][bros.y+50] == 2){
+						if(bros.jumpState == 1)
+							bros.motion = 0;
+						bros.jumpState = 0;
+					}
+					else{
+						bros.jumpState = 1;
+						bros.JumpDown();
+						if(bros.RL == Bros.RIGHT)
+							bros.motion = Bros.JUMPDOWN_R;
+						else if(bros.RL == Bros.LEFT)
+							bros.motion = Bros.JUMPDOWN_L;
+					}
 				}
 			}
 			for(int i = 0; i < MAX_MISSILE; i++){
@@ -241,14 +335,28 @@ class SnowBrosComponent extends JComponent{
 				shotDelay -= 1;
 			
 			for(int i = 0; i < MAX_ENEMY; i++){
-				if(enemy[i].state == Enemy.E_ST_DEATH)
-					enemy[i].birth(i);
+				if(enemy[i].state == Enemy.E_ST_DEATH){
+					if(STATE == STAGE1)
+						enemy[i].birth1(i);
+					else if(STATE == STAGE2)
+						enemy[i].birth2(i);
+					else if(STATE == STAGE3)
+						enemy[i].birth3(i);
+				}
 				else if(enemy[i].state == Enemy.E_ST_ALIVE){
 					enemy[i].Move();
 					if(bros.getBBox().intersects(enemy[i].getBBox())){
 						enemy[i].Move();
 						bros.Blast();
+						bros.xi = 7;
+						bros.yi = 10;
 						life--; //LIFE감소
+						for(int j = 0; j < MAX_ENEMY; j++){
+							enemy[j].da = 1;
+						}
+						for(int j = 0; j < MAX_MISSILE; j++){
+							myShot[j].di = 75; 
+						}
 						if(life==0){
 							STATE = ENDING;
 						}
@@ -270,23 +378,94 @@ class SnowBrosComponent extends JComponent{
 				else if(enemy[i].state == Enemy.E_ST_ROLL ){
 					enemy[i].Roll();
 					if(rolldir[i] == SHOT_RIGHT){
-						if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 2){
-							enemy[i].Bounce();
-							rolldir[i] = SHOT_LEFT;
+						if(STATE == STAGE1){
+							if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_LEFT;
+							}
+							else if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1; //enemystate 1씩감소
+								score += 50;
+								myItem[i].birth();
+								itemTime[i] = 150;
+							}
 						}
-						else if(map[STAGE1][enemy[i].x+25][enemy[i].y] == 3){
-							enemy[i].blast();
+						else if(STATE == STAGE2){
+							if(map[STAGE2][enemy[i].x+25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_LEFT;
+							}
+							else if(map[STAGE2][enemy[i].x+25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1; //enemystate 1씩감소
+								score += 50; 
+								myItem[i].birth();
+								itemTime[i] = 150; 
+							}
+						}
+						else if(STATE == STAGE3){
+							if(map[STAGE3][enemy[i].x+25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_LEFT;
+							}
+							else if(map[STAGE3][enemy[i].x+25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1; //enemystate 1씩감소
+								score += 50; 
+								myItem[i].birth();
+								itemTime[i] = 150; 
+							}
 						}
 					}
 					else if(rolldir[i] == SHOT_LEFT){
-						if(map[STAGE1][enemy[i].x-25][enemy[i].y] == 2){
-							enemy[i].Bounce();
-							rolldir[i] = SHOT_RIGHT;
+						if(STATE == STAGE1){
+							if(map[STAGE1][enemy[i].x-25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_RIGHT;
+							}
+							else if(map[STAGE1][enemy[i].x-25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1;
+								score += 50; 
+								myItem[i].birth();
+								itemTime[i] = 150; 
+							}
 						}
-						else if(map[STAGE1][enemy[i].x-25][enemy[i].y] == 3)
-							enemy[i].blast();
+						if(STATE == STAGE2){
+							if(map[STAGE2][enemy[i].x-25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_RIGHT;
+							}
+							else if(map[STAGE2][enemy[i].x-25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1;
+								score += 50; 
+								myItem[i].birth();
+								itemTime[i] = 150; 
+							}
+						}
+						if(STATE == STAGE3){
+							if(map[STAGE3][enemy[i].x-25][enemy[i].y] == 2){
+								enemy[i].Bounce();
+								rolldir[i] = SHOT_RIGHT;
+							}
+							else if(map[STAGE3][enemy[i].x-25][enemy[i].y] == 3){
+								enemy[i].blast();
+								enemystate -= 1;
+								score += 50; 
+								myItem[i].birth();
+								itemTime[i] = 150; 
+							}
+						}
 					}
-					if(map[STAGE1][enemy[i].x][enemy[i].y+50] == 0){
+					if(map[STAGE1][enemy[i].x][enemy[i].y+50] == 0 && STATE == STAGE1){
+						enemy[i].Down();
+					}
+					else if(map[STAGE2][enemy[i].x][enemy[i].y+50] == 0 && STATE == STAGE2){
+						enemy[i].Down();
+					}
+					else if(map[STAGE3][enemy[i].x][enemy[i].y+50] == 0 && STATE == STAGE3){
 						enemy[i].Down();
 					}
 					for(int j = 0; j < MAX_ENEMY; j++){
@@ -301,8 +480,13 @@ class SnowBrosComponent extends JComponent{
 								bros.motion = Bros.ROLL_R;
 								bros.imagecount = 0;
 							}
-							else
+							else if (enemy[j].state == Enemy.E_ST_ALIVE || enemy[j].state == Enemy.E_ST_DAMAGE){
 								enemy[j].blast();
+								enemystate -= 1;
+								score += 50; 
+								myItem[j].birth();
+								itemTime[j] = 150; 
+							}
 						}
 					}
 				}
@@ -338,8 +522,8 @@ class SnowBrosComponent extends JComponent{
 				if(myItem[i].state==Item.SPEED){//이동속도증가 10단위로
 					if(bros.getBBox().intersects(myItem[i].getBBox())){
 						myItem[i].Blast();
-						bros.xi = 20;
-						bros.yi = 20;
+						bros.xi = 15;
+						bros.fast = 1;
 					}
 				}
 				if(myItem[i].state==Item.STRONG){ //damage 2씩 증가
@@ -347,6 +531,7 @@ class SnowBrosComponent extends JComponent{
 						myItem[i].Blast();
 						for(int j = 0; j < MAX_ENEMY; j++){
 							enemy[j].da = 2;
+							big = 1;
 						}
 					}
 				}
@@ -373,17 +558,79 @@ class SnowBrosComponent extends JComponent{
 			
 			
 			if(brosright == 1){
-				if(map[STAGE1][bros.x+25][bros.y] >= 2)
-					;
-				else
-					bros.MoveRight();
+				if(STATE == STAGE1){
+					if(map[STAGE1][bros.x+25][bros.y] >= 2)
+						;
+					else
+						bros.MoveRight();
+				}
+				if(STATE == STAGE2){
+					if(map[STAGE2][bros.x+25][bros.y] >= 2)
+						;
+					else
+						bros.MoveRight();
+				}
+				if(STATE == STAGE3){
+					if(map[STAGE3][bros.x+25][bros.y] >= 2)
+						;
+					else
+						bros.MoveRight();
+				}
 			}
 			else if(brosleft == 1){
-				if(map[STAGE1][bros.x-25][bros.y] >= 2)
-					;
-				else
-					bros.MoveLeft();
+				if(STATE == STAGE1){
+					if(map[STAGE1][bros.x-25][bros.y] >= 2)
+						;
+					else
+						bros.MoveLeft();
+				}
+				if(STATE == STAGE2){
+					if(map[STAGE2][bros.x-25][bros.y] >= 2)
+						;
+					else
+						bros.MoveLeft();
+				}
+				if(STATE == STAGE3){
+					if(map[STAGE3][bros.x-25][bros.y] >= 2)
+						;
+					else
+						bros.MoveLeft();
+				}
+			}			
+			
+			if(enemystate == 0){
+				if(STATE == STAGE1){
+					STATE = STAGE2;
+					enemystate = MAX_ENEMY;
+					bros.StartBros();
+					for(int i = 0; i < MAX_ENEMY; i++){
+						enemy[i].state = Enemy.E_ST_DEATH;
+						enemy[i].damage = 0;
+						ball[i] = false;
+						rolldir[i] = 0;
+					}
+					for(int i = 0; i < MAX_ITEM; i++){
+						myItem[i].state = Item.I_ST_DEATH;
+					}
+				}
+				else if(STATE == STAGE2){
+					STATE = STAGE3;
+					enemystate = MAX_ENEMY;
+					bros.StartBros();
+					for(int i = 0; i < MAX_ENEMY; i++){
+						enemy[i].state = Enemy.E_ST_DEATH;
+						enemy[i].damage = 0;
+						ball[i] = false;
+						rolldir[i] = 0;
+					}
+					for(int i = 0; i < MAX_ITEM; i++){
+						myItem[i].state = Item.I_ST_DEATH;
+					}
+				}
+				else if(STATE == STAGE3)
+					STATE = ENDING;
 			}
+			
 			//카운터
 			count = (count + 1)%20;
 			repaint();
@@ -394,15 +641,33 @@ class SnowBrosComponent extends JComponent{
 		@Override
 		public void keyReleased(KeyEvent e) {
 			int code = e.getKeyCode();
-			if(STATE == TITLE){ 
+			if(STATE == TITLE){
 				if(code == KeyEvent.VK_SPACE){ //게임 시작
 					STATE = STAGE1;
 					score = 0;
 					life = 3;
 					bros.StartBros();
+					for(int i = 0; i < MAX_ENEMY; i++){
+						enemy[i].state = Enemy.E_ST_DEATH;
+						enemy[i].damage = 0;
+						ball[i] = false;
+						rolldir[i] = 0;
+					}
+					for(int i = 0; i < MAX_ITEM; i++){
+						myItem[i].state = Item.I_ST_DEATH;
+					}
+					for(int j = 0; j < MAX_ENEMY; j++){
+						enemy[j].da = 1;
+					}
+					for(int j = 0; j < MAX_MISSILE; j++){
+						myShot[j].di = 75; 
+					}
+					brosright = 0;
+					brosleft = 0;
+					brosdown = 0;
 				}
 			}
-			else if(STATE == STAGE1){ //STATE1일때
+			else if((STATE == STAGE1 || STATE == STAGE2 || STATE == STAGE3) && bros.blast == 0){ 
 				if(code == KeyEvent.VK_RIGHT){
 					if(bros.motion == Bros.MOVE_R)
 						bros.motion = 0;
@@ -426,7 +691,7 @@ class SnowBrosComponent extends JComponent{
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			if(STATE == STAGE1){ //STAGE1일때
+			if((STATE == STAGE1 || STATE == STAGE2 || STATE == STAGE3)  && bros.blast == 0){ //STAGE1일때
 				if(code == KeyEvent.VK_RIGHT)
 					brosright = 1;
 				else if(code == KeyEvent.VK_LEFT)
@@ -517,6 +782,64 @@ class SnowBrosComponent extends JComponent{
 				}
 			}
 			
+			g.setColor(Color.WHITE);
+			for(Missile m : myShot)
+				m.Draw(g);
+			for(Enemy e : enemy)
+				e.Draw(g);
+			for(Item i : myItem)
+				i.Draw(g);
+			bros.Draw(g);
+			
+			Font font = new Font(Font.MONOSPACED,Font.BOLD, 20);
+			g.setFont(font);
+			g.setColor(Color.WHITE);
+			g.drawString("SCORE: " + score, 20, 30);
+			g.drawString(" LIFE: " + life, 20, 60);
+		}
+		else if (STATE == STAGE2){
+			g.drawImage(background_stage, 0, 0, X, Y, null);
+			g.setColor(Color.YELLOW);
+			for(int i = 0; i < X; i++){
+				for(int j = 0; j < Y; j++){
+					if(map[STAGE2][i][j] == 1)
+						g.fillRect(i, j, 1, 1);
+				}
+			}
+			
+			g.setColor(Color.WHITE);
+			for(Missile m : myShot)
+				m.Draw(g);
+			for(Enemy e : enemy)
+				e.Draw(g);
+			for(Item i : myItem)
+				i.Draw(g);
+			bros.Draw(g);
+			
+			Font font = new Font(Font.MONOSPACED,Font.BOLD, 20);
+			g.setFont(font);
+			g.setColor(Color.WHITE);
+			g.drawString("SCORE: " + score, 20, 30);
+			g.drawString(" LIFE: " + life, 20, 60);
+		}
+		
+		else if (STATE == STAGE3){
+			g.drawImage(background_stage, 0, 0, X, Y, null);
+			g.setColor(Color.YELLOW);
+			for(int i = 0; i < X; i++){
+				for(int j = 0; j < Y; j++){
+					if(map[STAGE3][i][j] == 1)
+						g.fillRect(i, j, 1, 1);
+				}
+			}
+			g.setColor(Color.YELLOW);
+			for(int i = 0; i < X; i++){
+				for(int j = 0; j < Y; j++){
+					if(map[STAGE3][i][j] == 2)
+						g.fillRect(i, j, 1, 1);
+				}
+			}
+
 			g.setColor(Color.WHITE);
 			for(Missile m : myShot)
 				m.Draw(g);
